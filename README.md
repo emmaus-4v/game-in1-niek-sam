@@ -9,17 +9,18 @@ Gemaakt door:
 
 Basis: uitleg, spelen, afgaan en punten
 - [x] maak index.html, style.css en script.js met canvas
-- [ ] teken speler
-- [ ] beweeg speler
+- [x] teken speler
+- [x] beweeg speler
+- [x] make barriers
 - [ ] testen hoe afbeeldingen werken
 - [ ] teken kogel
 - [ ] beweeg kogel
 - [ ] teken vijand
 - [ ] beweeg vijand
 - [ ] life system
-- [ ] levels (als alle vijandjes dood zijn && spelerPos = x, dan Case LEVEL2)
-- [ ] meer levels maken
+- [ ] switching levels (als alle vijandjes dood zijn && spelerPos = x, dan Case LEVEL2)
 - [ ] game-over screen
+- [ ] meer levels maken
 - [ ] 
 - [ ] 
 - [ ] ... *(vul zelf aan)*

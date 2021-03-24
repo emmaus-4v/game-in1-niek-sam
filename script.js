@@ -24,6 +24,7 @@ var spelStatus = SPELEN;
 
 var spelerX = 200; // x-positie van speler
 var spelerY = 100; // y-positie van speler
+var spelerSpeed = 6; // snelheid van speler
 
 var kogelX = 0;    // x-positie van kogel
 var kogelY = 0;    // y-positie van kogel
@@ -47,7 +48,7 @@ var score = 0; // aantal behaalde punten
  */
 var tekenVeld = function () {
   fill("green");
-  rect(20, 20, width - 2 * 20, height - 2 * 20);
+  rect(0, 0, width , height );
 };
 
 
@@ -105,6 +106,39 @@ var beweegKogel = function() {
  * Updatet globale variabele spelerX en spelerY
  */
 var beweegSpeler = function() {
+
+if(keyIsDown(68)){
+    spelerX = spelerX + spelerSpeed;
+}
+
+if(keyIsDown(65)){
+    spelerX = spelerX - spelerSpeed;
+}
+
+if(keyIsDown(87)){
+    spelerY = spelerY - spelerSpeed;
+}
+
+if(keyIsDown(83)){
+    spelerY = spelerY + spelerSpeed;
+}
+
+if(spelerX < 25){
+    spelerX = spelerX + spelerSpeed;
+}
+
+if(spelerX > width - 25){
+    spelerX = spelerX - spelerSpeed;
+}
+
+if(spelerY < 25){
+    spelerY = spelerY + spelerSpeed;
+}
+
+if(spelerY > height - 25){
+    spelerY = spelerY - spelerSpeed;
+}
+
 
 };
 
