@@ -29,8 +29,12 @@ var spelerSpeed = 6; // snelheid van speler
 var kogelX = 0;    // x-positie van kogel
 var kogelY = 0;    // y-positie van kogel
 
-var vijandX = 0;   // x-positie van vijand
-var vijandY = 0;   // y-positie van vijand
+var aantalVijanden = 15; // aantal vijanden
+var vijanden = []; // 
+var vijandX = [];   // array met x-posities van vijanden
+var vijandY = [];   // array met y-posities van vijanden
+var vijandSpeed = []; // array met snelheden van vijanden
+var vijandScale = []; // array met sizes van vijanden
 
 var score = 0; // aantal behaalde punten
 
@@ -48,17 +52,23 @@ var score = 0; // aantal behaalde punten
  */
 var tekenVeld = function () {
   fill("green");
+  translate(0,0);
   rect(0, 0, width , height );
 };
 
 
 /**
  * Tekent de vijand
- * @param {number} x x-coördinaat
- * @param {number} y y-coördinaat
  */
-var tekenVijand = function(x, y) {
-    
+var tekenVijand = function() {
+
+    for(var i = 0; i < vijanden.length; i++){
+        
+        
+        fill("red");
+        ellipse(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]);
+        rect(vijandX[i], vijandY[i] - vijandScale[i]*0.2, vijandScale[i], vijandScale[i]*0.4);
+    };
 
 };
 
@@ -81,7 +91,10 @@ var tekenKogel = function(x, y) {
  */
 var tekenSpeler = function(x, y) {
   fill("white");
+
   ellipse(x, y, 50, 50);
+  rect(x, y - 10 , 50, 20);
+
 };
 
 
@@ -89,7 +102,43 @@ var tekenSpeler = function(x, y) {
  * Updatet globale variabelen met positie van vijand of tegenspeler
  */
 var beweegVijand = function() {
-    
+
+for(var i = 0; i < vijandX.length; i++){
+    if(spelerX > vijandX[i] ){
+        vijandX[i] = vijandX[i] + vijandSpeed[i];
+    }
+
+    if(spelerX < vijandX[i]){
+        vijandX[i] = vijandX[i] - vijandSpeed[i];
+    }
+}
+for(var i = 0; i < vijandY.length; i++){
+    if(spelerY > vijandY[i]){
+        vijandY[i] = vijandY[i] + vijandSpeed[i];
+    }
+
+    if(spelerY < vijandY[i]){
+        vijandY[i] = vijandY[i] - vijandSpeed[i];
+    }
+}
+
+
+
+/*if(spelerX < 25){
+    spelerX = spelerX + spelerSpeed;
+}
+
+if(spelerX > width - 25){
+    spelerX = spelerX - spelerSpeed;
+}
+
+if(spelerY < 25){
+    spelerY = spelerY + spelerSpeed;
+}
+
+if(spelerY > height - 25){
+    spelerY = spelerY - spelerSpeed;
+}*/
 };
 
 
@@ -107,6 +156,8 @@ var beweegKogel = function() {
  */
 var beweegSpeler = function() {
 
+
+
 if(keyIsDown(68)){
     spelerX = spelerX + spelerSpeed;
 }
@@ -122,6 +173,7 @@ if(keyIsDown(87)){
 if(keyIsDown(83)){
     spelerY = spelerY + spelerSpeed;
 }
+
 
 if(spelerX < 25){
     spelerX = spelerX + spelerSpeed;
@@ -141,6 +193,9 @@ if(spelerY > height - 25){
 
 
 };
+
+
+    
 
 
 /**
@@ -182,9 +237,18 @@ var checkGameOver = function() {
 function setup() {
   // Maak een canvas (rechthoek) waarin je je speelveld kunt tekenen
   createCanvas(1280, 720);
-
   // Kleur de achtergrond blauw, zodat je het kunt zien
   background('blue');
+
+  for(var i = 0; i < aantalVijanden; i++){
+        vijanden.push("vijand"+ i);
+        vijandX.push(random(25, width - 25));
+        vijandY.push(random(25, height - 25));
+        vijandScale.push (random(15, 75));
+        vijandSpeed.push(-0.025 * vijandScale[i] + 2.875);
+    };
+
+  
 }
 
 
@@ -211,7 +275,7 @@ function draw() {
       }
 
       tekenVeld();
-      tekenVijand(vijandX, vijandY);
+      tekenVijand();
       tekenKogel(kogelX, kogelY);
       tekenSpeler(spelerX, spelerY);
 
