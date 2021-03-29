@@ -28,9 +28,15 @@ var spelerSpeed = 6; // snelheid van speler
 
 var kogelX = spelerX + 55;    // x-positie van kogel
 var kogelY = spelerY;    // y-positie van kogel
+var kogelXOriginal = spelerX + 55;    // x-positie van kogel
+var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
-var kogelSpeed = 10; // snelheid van kogel
+var originalKogelSpeed = 5; // snelheid van de kogel
+var kogelXSpeed = 5; // x snelheid van kogel
+var kogelYSpeed = 5; // y snelheid van kogel
+
+
 
 var aantalVijanden = 15; // aantal vijanden
 var vijanden = []; // 
@@ -41,6 +47,7 @@ var vijandScale = []; // array met sizes van vijanden
 
 var score = 0; // aantal behaalde punten
 
+var mouseIsClicked = false; // checkt of de muis is ingedrukt
 
 
 
@@ -152,21 +159,64 @@ if(spelerY > height - 25){
  */
 var beweegKogel = function() {
 
+//de setup van het schieten, zorgt dat je maar 1 keer hoeft te klikken en bepaald een aantal variabelen. (we hebben niet gewoon "mouseClicked" gebruikt omdat het een error (blauw scherm) gaf)
+if(mouseIsPressed && mouseIsClicked === false){
     kogelXDestination = mouseX;
     kogelYDestination = mouseY;
-if(keyIsDown(32)){
-    
-    if(kogelX < kogelXDestination){ kogelX = kogelX + kogelSpeed;}
-    if(kogelX > kogelXDestination){ kogelX = kogelX - kogelSpeed;}
-    if(kogelY > kogelYDestination){ kogelY = kogelY - kogelSpeed;}
-    if(kogelY < kogelYDestination){ kogelY = kogelY + kogelSpeed;}
 
-    } else {
-    kogelX = spelerX + 55;
-    kogelY = spelerY;
-} 
+    mouseIsClicked = true;
+
+    // berekent de relatieve snelheid in het geval dat de afstand die het balletje aflegt over de x-as groter is dan de afstand die het balletje aflegt over de y-as of als de afstand over de x-as negatief is kleiner is dan de afstand over de y-as (anders schiet je de bal naar een ander universum)
+    if(((kogelXDestination - kogelX) > (kogelYDestination - kogelY) && (kogelXDestination - kogelX) > 0) || ((kogelXDestination - kogelX) < (kogelYDestination - kogelY) && (kogelXDestination - kogelX) < 0)){
+        if((kogelXDestination - kogelX) < 0){
+            kogelXSpeed = -1 * originalKogelSpeed;
+         }
+
+  
+        kogelYSpeed = (kogelYDestination - kogelY) * (kogelXSpeed/(kogelXDestination-kogelX));
+
+    // berekent de relatieve snelheid in het geval dat de afstand die het balletje aflegt over de y-as groter is dan de afstand die het balletje aflegt over de x-as of als de afstand over de y-as negatief is kleiner is dan de afstand over de x-as (anders schiet je de bal naar een ander universum)
+    }else if (((kogelYDestination - kogelY) >= (kogelXDestination - kogelX) && (kogelYDestination - kogelY) > 0) || ((kogelYDestination - kogelY) <= (kogelXDestination - kogelX) && (kogelYDestination - kogelY) < 0)){
+
+        if((kogelYDestination - kogelY) < 0){
+            kogelYSpeed = -1 * originalKogelSpeed;
+         }
+
+  
+        kogelXSpeed = (kogelXDestination - kogelX) * (kogelYSpeed/(kogelYDestination-kogelY)); 
+    }
+
 }
 
+//beweegt de kogel naar zijn destination
+if(mouseIsClicked === true){
+  
+    if(kogelX < kogelXDestination){kogelX = kogelX + kogelXSpeed}
+    if(kogelX > kogelXDestination){kogelX = kogelX + kogelXSpeed}
+    if(kogelY < kogelYDestination){kogelY = kogelY + kogelYSpeed}
+    if(kogelY > kogelYDestination){kogelY = kogelY + kogelYSpeed}
+
+}
+
+//checkt if de kogel bij zijn destination is aangekomen
+if(kogelX < kogelXDestination +originalKogelSpeed && kogelX > kogelXDestination -originalKogelSpeed && kogelY < kogelYDestination +originalKogelSpeed && kogelY > kogelYDestination -originalKogelSpeed && mouseIsClicked === true ){ 
+    mouseIsClicked = false;
+    kogelXSpeed = originalKogelSpeed;
+    kogelYSpeed = originalKogelSpeed;
+
+}
+
+//zorgt dat de kogel meebeweegt met de speler als hij niet aan het schieten is
+kogelXOriginal = spelerX + 55;
+kogelYOriginal = spelerY;  
+
+//reset de positie van de kogel naar de speler als hij bij zijn destination is aangekomen
+if(mouseIsClicked === false){
+    kogelX = kogelXOriginal;
+    kogelY = kogelYOriginal;
+}
+
+}
 
 /**
  * Kijkt wat de toetsen/muis etc zijn.
@@ -209,6 +259,7 @@ if(spelerY < 25){
 if(spelerY > height - 25){
     spelerY = spelerY - spelerSpeed;
 }
+
 
 
 };
