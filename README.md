@@ -13,10 +13,10 @@ Basis: uitleg, spelen, afgaan en punten
 - [x] beweeg speler
 - [x] make barriers
 - [ ] testen hoe afbeeldingen werken
-- [ ] teken kogel
+- [x] teken kogel
 - [ ] beweeg kogel
-- [ ] teken vijand
-- [ ] beweeg vijand
+- [x] teken vijand
+- [x] beweeg vijand
 - [ ] life system
 - [ ] switching levels (als alle vijandjes dood zijn && spelerPos = x, dan Case LEVEL2)
 - [ ] game-over screen

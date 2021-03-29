@@ -26,8 +26,11 @@ var spelerX = 200; // x-positie van speler
 var spelerY = 100; // y-positie van speler
 var spelerSpeed = 6; // snelheid van speler
 
-var kogelX = 0;    // x-positie van kogel
-var kogelY = 0;    // y-positie van kogel
+var kogelX = spelerX + 55;    // x-positie van kogel
+var kogelY = spelerY;    // y-positie van kogel
+var kogelXDestination = 0; // x destination van kogel
+var kogelYDestination = 0; // y destination van kogel
+var kogelSpeed = 10; // snelheid van kogel
 
 var aantalVijanden = 15; // aantal vijanden
 var vijanden = []; // 
@@ -80,6 +83,8 @@ var tekenVijand = function() {
  */
 var tekenKogel = function(x, y) {
 
+    fill("blue");
+    ellipse(x, y, 10, 10)
 
 };
 
@@ -147,7 +152,20 @@ if(spelerY > height - 25){
  */
 var beweegKogel = function() {
 
-};
+    kogelXDestination = mouseX;
+    kogelYDestination = mouseY;
+if(keyIsDown(32)){
+    
+    if(kogelX < kogelXDestination){ kogelX = kogelX + kogelSpeed;}
+    if(kogelX > kogelXDestination){ kogelX = kogelX - kogelSpeed;}
+    if(kogelY > kogelYDestination){ kogelY = kogelY - kogelSpeed;}
+    if(kogelY < kogelYDestination){ kogelY = kogelY + kogelSpeed;}
+
+    } else {
+    kogelX = spelerX + 55;
+    kogelY = spelerY;
+} 
+}
 
 
 /**
@@ -160,6 +178,7 @@ var beweegSpeler = function() {
 
 if(keyIsDown(68)){
     spelerX = spelerX + spelerSpeed;
+   
 }
 
 if(keyIsDown(65)){
@@ -276,8 +295,8 @@ function draw() {
 
       tekenVeld();
       tekenVijand();
-      tekenKogel(kogelX, kogelY);
       tekenSpeler(spelerX, spelerY);
+      tekenKogel(kogelX, kogelY);
 
       if (checkGameOver()) {
         spelStatus = GAMEOVER;
