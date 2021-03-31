@@ -34,7 +34,7 @@ var kogelXOriginal = spelerX + 55;    // x-positie van kogel
 var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
-var originalKogelSpeed = 7 ; // snelheid van de kogel
+var originalKogelSpeed = 6 ; // snelheid van de kogel
 var kogelXSpeed = 5; // x snelheid van kogel
 var kogelYSpeed = 5; // y snelheid van kogel
 
