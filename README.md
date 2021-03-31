@@ -2,8 +2,8 @@ Deze game is gebaseerd op het template voor 4HV van het Emmauscollege Rotterdam
 
 ## Mijn spel: *naam van het spel*
 Gemaakt door:
-- *naam van leerling Niek
-- *naam van leerling Sam
+- Niek
+- Sam
 
 ## Mijn planning
 
@@ -21,9 +21,6 @@ Basis: uitleg, spelen, afgaan en punten
 - [ ] switching levels (als alle vijandjes dood zijn && spelerPos = x, dan Case LEVEL2)
 - [ ] game-over screen
 - [ ] meer levels maken
-- [ ] 
-- [ ] 
-- [ ] ... *(vul zelf aan)*
 - [ ] punten op scherm zetten
 - [ ] punten kunnen scoren
 - [ ] uitlegscherm

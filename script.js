@@ -40,7 +40,7 @@ var kogelYSpeed = 5; // y snelheid van kogel
 
 
 
-var aantalVijanden = 15; // aantal vijanden
+var aantalVijanden = 5; // aantal vijanden
 var vijanden = []; // 
 var vijandX = [];   // array met x-posities van vijanden
 var vijandY = [];   // array met y-posities van vijanden
@@ -261,14 +261,7 @@ if(spelerY < 25){
 if(spelerY > height - 25){
     spelerY = spelerY - spelerSpeed;
 }
-
-
-
 };
-
-
-    
-
 
 /**
  * Zoekt uit of de vijand is geraakt
@@ -278,7 +271,6 @@ var checkVijandGeraakt = function() {
 
   return false;
 };
-
 
 /**
  * Zoekt uit of de speler is geraakt
