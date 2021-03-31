@@ -26,13 +26,15 @@ var spelerX = 200; // x-positie van speler
 var spelerY = 100; // y-positie van speler
 var spelerSpeed = 6; // snelheid van speler
 
+var blobvis = 0;
+
 var kogelX = spelerX + 55;    // x-positie van kogel
 var kogelY = spelerY;    // y-positie van kogel
 var kogelXOriginal = spelerX + 55;    // x-positie van kogel
 var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
-var originalKogelSpeed = 5; // snelheid van de kogel
+var originalKogelSpeed = 7 ; // snelheid van de kogel
 var kogelXSpeed = 5; // x snelheid van kogel
 var kogelYSpeed = 5; // y snelheid van kogel
 
@@ -48,7 +50,6 @@ var vijandScale = []; // array met sizes van vijanden
 var score = 0; // aantal behaalde punten
 
 var mouseIsClicked = false; // checkt of de muis is ingedrukt
-
 
 
 
@@ -103,10 +104,11 @@ var tekenKogel = function(x, y) {
  */
 var tekenSpeler = function(x, y) {
   fill("white");
-
   ellipse(x, y, 50, 50);
   rect(x, y - 10 , 50, 20);
-
+  image(blobvis, x, y, 50, 50);
+ 
+  
 };
 
 
@@ -299,6 +301,10 @@ var checkGameOver = function() {
 };
 
 
+function preload(){
+    blobvis = loadImage('images/test.jpg');
+
+}
 /**
  * setup
  * de code in deze functie wordt één keer uitgevoerd door
@@ -317,6 +323,8 @@ function setup() {
         vijandScale.push (random(15, 75));
         vijandSpeed.push(-0.025 * vijandScale[i] + 2.875);
     };
+
+    new Image()
 
   
 }

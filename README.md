@@ -14,7 +14,7 @@ Basis: uitleg, spelen, afgaan en punten
 - [x] make barriers
 - [ ] testen hoe afbeeldingen werken
 - [x] teken kogel
-- [ ] beweeg kogel
+- [x] beweeg kogel
 - [x] teken vijand
 - [x] beweeg vijand
 - [ ] life system
