@@ -104,9 +104,9 @@ var tekenKogel = function(x, y) {
  */
 var tekenSpeler = function(x, y) {
   fill("white");
-  ellipse(x, y, 50, 50);
+  //ellipse(x, y, 50, 50);
   rect(x, y - 10 , 50, 20);
-  image(blobvis, x, y, 50, 50);
+  image(blobvis, x - 25, y - 25, 50, 50);
  
   
 };
