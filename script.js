@@ -35,17 +35,19 @@ var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
 var originalKogelSpeed = 6 ; // snelheid van de kogel
-var kogelXSpeed = 5; // x snelheid van kogel
-var kogelYSpeed = 5; // y snelheid van kogel
+var kogelXSpeed = 6; // x snelheid van kogel
+var kogelYSpeed = 6; // y snelheid van kogel
+var kogelDestinationReached = false; // checkt of de destination van de kogel is bereikt
 
 
 
-var aantalVijanden = 5; // aantal vijanden
+var aantalVijanden = 15; // aantal vijanden
 var vijanden = []; // 
 var vijandX = [];   // array met x-posities van vijanden
 var vijandY = [];   // array met y-posities van vijanden
 var vijandSpeed = []; // array met snelheden van vijanden
 var vijandScale = []; // array met sizes van vijanden
+var vijandLevens = []; // array met het aantal levens van vijanden
 
 var score = 0; // aantal behaalde punten
 
@@ -76,9 +78,17 @@ var tekenVijand = function() {
     for(var i = 0; i < vijanden.length; i++){
         
         
+        fill("yellow");
+        ellipse(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]);
+        rect(vijandX[i], vijandY[i] - vijandScale[i]*0.2, vijandScale[i], vijandScale[i]*0.4);
+
+        if(vijandLevens[i] === 1){
         fill("red");
         ellipse(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]);
         rect(vijandX[i], vijandY[i] - vijandScale[i]*0.2, vijandScale[i], vijandScale[i]*0.4);
+        }
+
+     
     };
 
 };
@@ -103,8 +113,13 @@ var tekenKogel = function(x, y) {
  * @param {number} y y-coördinaat
  */
 var tekenSpeler = function(x, y) {
+  
+  stroke("blue");
+  noFill();
+  ellipse(x, y, (width/100) *66, (width/100) *66);
+
+  noStroke();
   fill("white");
-  //ellipse(x, y, 50, 50);
   rect(x, y - 10 , 50, 20);
   image(blobvis, x - 25, y - 25, 50, 50);
  
@@ -168,6 +183,8 @@ if(mouseIsPressed && mouseIsClicked === false){
 
     mouseIsClicked = true;
 
+
+
     // berekent de relatieve snelheid in het geval dat de afstand die het balletje aflegt over de x-as groter is dan de afstand die het balletje aflegt over de y-as of als de afstand over de x-as negatief is kleiner is dan de afstand over de y-as (anders schiet je de bal naar een ander universum)
     if(((kogelXDestination - kogelX) > (kogelYDestination - kogelY) && (kogelXDestination - kogelX) > 0) || ((kogelXDestination - kogelX) < (kogelYDestination - kogelY) && (kogelXDestination - kogelX) < 0)){
         if((kogelXDestination - kogelX) < 0){
@@ -188,10 +205,12 @@ if(mouseIsPressed && mouseIsClicked === false){
         kogelXSpeed = (kogelXDestination - kogelX) * (kogelYSpeed/(kogelYDestination-kogelY)); 
     }
 
+
+
 }
 
 //beweegt de kogel naar zijn destination
-if(mouseIsClicked === true){
+if(mouseIsClicked === true && kogelDestinationReached === false){
   
     if(kogelX < kogelXDestination){kogelX = kogelX + kogelXSpeed}
     if(kogelX > kogelXDestination){kogelX = kogelX + kogelXSpeed}
@@ -202,17 +221,36 @@ if(mouseIsClicked === true){
 
 //checkt if de kogel bij zijn destination is aangekomen
 if(kogelX < kogelXDestination +originalKogelSpeed && kogelX > kogelXDestination -originalKogelSpeed && kogelY < kogelYDestination +originalKogelSpeed && kogelY > kogelYDestination -originalKogelSpeed && mouseIsClicked === true ){ 
-    mouseIsClicked = false;
+    kogelDestinationReached = true;
     kogelXSpeed = originalKogelSpeed;
     kogelYSpeed = originalKogelSpeed;
 
 }
 
-//zorgt dat de kogel meebeweegt met de speler als hij niet aan het schieten is
+//zorgt dat de orginele positie van de kogel altijd bij de speler is
 kogelXOriginal = spelerX + 55;
 kogelYOriginal = spelerY;  
 
-//reset de positie van de kogel naar de speler als hij bij zijn destination is aangekomen
+//beweegt de kogel terug naar de speler als een boomerang
+if (kogelDestinationReached === true && mouseIsClicked === true){
+
+    if(kogelX < kogelXOriginal){kogelX = kogelX + originalKogelSpeed}
+    if(kogelX > kogelXOriginal){kogelX = kogelX - originalKogelSpeed}
+    if(kogelY < kogelYOriginal){kogelY = kogelY + originalKogelSpeed}
+    if(kogelY > kogelYOriginal){kogelY = kogelY - originalKogelSpeed}
+
+}
+
+if(kogelX < kogelXOriginal +originalKogelSpeed && kogelX > kogelXOriginal -originalKogelSpeed && kogelY < kogelYOriginal +originalKogelSpeed && kogelY > kogelYOriginal -originalKogelSpeed && mouseIsClicked === true ){ 
+    mouseIsClicked = false;
+    kogelDestinationReached = false;
+    kogelX = kogelXOriginal;
+    kogelY = kogelYOriginal;
+
+}
+
+
+//zorgt dat de kogel met de speler meebeweegt als hij niet aan het schieten is
 if(mouseIsClicked === false){
     kogelX = kogelXOriginal;
     kogelY = kogelYOriginal;
@@ -269,6 +307,27 @@ if(spelerY > height - 25){
  */
 var checkVijandGeraakt = function() {
 
+    for(var i = 0; i < vijanden.length; i++){
+        
+        if(kogelX < vijandX[i] +vijandScale[i]/2 && kogelX > vijandX[i] -vijandScale[i]/2 && kogelY < vijandY[i] +vijandScale[i]/2 && kogelY > vijandY[i] -vijandScale[i]/2){
+
+                vijandLevens[i] = vijandLevens[i] - 1;
+
+        }
+        
+        if(vijandLevens[i] < 1){
+                vijanden.splice(i, 1);
+                vijandX.splice(i, 1);
+                vijandY.splice(i, 1);
+                vijandScale.splice(i, 1);
+                vijandSpeed.splice(i, 1);
+                vijandLevens.splice(i, 1);
+                i--;
+        }
+
+
+    };
+
   return false;
 };
 
@@ -314,6 +373,7 @@ function setup() {
         vijandY.push(random(25, height - 25));
         vijandScale.push (random(15, 75));
         vijandSpeed.push(-0.025 * vijandScale[i] + 2.875);
+        vijandLevens.push(2);
     };
 
     new Image()
