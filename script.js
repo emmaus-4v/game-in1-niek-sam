@@ -34,20 +34,21 @@ var kogelXOriginal = spelerX + 55;    // x-positie van kogel
 var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
-var originalKogelSpeed = 6 ; // snelheid van de kogel
+var originalKogelSpeed = 8 ; // snelheid van de kogel
 var kogelXSpeed = 6; // x snelheid van kogel
 var kogelYSpeed = 6; // y snelheid van kogel
 var kogelDestinationReached = false; // checkt of de destination van de kogel is bereikt
 
 
 
-var aantalVijanden = 15; // aantal vijanden
+var aantalVijanden = 100; // aantal vijanden
 var vijanden = []; // 
 var vijandX = [];   // array met x-posities van vijanden
 var vijandY = [];   // array met y-posities van vijanden
 var vijandSpeed = []; // array met snelheden van vijanden
 var vijandScale = []; // array met sizes van vijanden
 var vijandLevens = []; // array met het aantal levens van vijanden
+var vijandInvinsible = []; // array met of de vijand net is geraakt of niet
 
 var score = 0; // aantal behaalde punten
 
@@ -82,6 +83,7 @@ var tekenVijand = function() {
         ellipse(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]);
         rect(vijandX[i], vijandY[i] - vijandScale[i]*0.2, vijandScale[i], vijandScale[i]*0.4);
 
+        //veranderd de kleur van de vijand als hij zijn tweede leven kwijt is
         if(vijandLevens[i] === 1){
         fill("red");
         ellipse(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]);
@@ -114,9 +116,9 @@ var tekenKogel = function(x, y) {
  */
 var tekenSpeler = function(x, y) {
   
-  stroke("blue");
-  noFill();
-  ellipse(x, y, (width/100) *66, (width/100) *66);
+  //stroke("blue");
+  //noFill();
+  //ellipse(kogelXOriginal, kogelYOriginal, originalKogelSpeed *10, originalKogelSpeed *10);
 
   noStroke();
   fill("white");
@@ -151,23 +153,6 @@ for(var i = 0; i < vijandY.length; i++){
     }
 }
 
-
-
-/*if(spelerX < 25){
-    spelerX = spelerX + spelerSpeed;
-}
-
-if(spelerX > width - 25){
-    spelerX = spelerX - spelerSpeed;
-}
-
-if(spelerY < 25){
-    spelerY = spelerY + spelerSpeed;
-}
-
-if(spelerY > height - 25){
-    spelerY = spelerY - spelerSpeed;
-}*/
 };
 
 
@@ -181,9 +166,7 @@ if(mouseIsPressed && mouseIsClicked === false){
     kogelXDestination = mouseX;
     kogelYDestination = mouseY;
 
-    mouseIsClicked = true;
-
-
+        mouseIsClicked = true;
 
     // berekent de relatieve snelheid in het geval dat de afstand die het balletje aflegt over de x-as groter is dan de afstand die het balletje aflegt over de y-as of als de afstand over de x-as negatief is kleiner is dan de afstand over de y-as (anders schiet je de bal naar een ander universum)
     if(((kogelXDestination - kogelX) > (kogelYDestination - kogelY) && (kogelXDestination - kogelX) > 0) || ((kogelXDestination - kogelX) < (kogelYDestination - kogelY) && (kogelXDestination - kogelX) < 0)){
@@ -193,6 +176,7 @@ if(mouseIsPressed && mouseIsClicked === false){
 
   
         kogelYSpeed = (kogelYDestination - kogelY) * (kogelXSpeed/(kogelXDestination-kogelX));
+        
 
     // berekent de relatieve snelheid in het geval dat de afstand die het balletje aflegt over de y-as groter is dan de afstand die het balletje aflegt over de x-as of als de afstand over de y-as negatief is kleiner is dan de afstand over de x-as (anders schiet je de bal naar een ander universum)
     }else if (((kogelYDestination - kogelY) >= (kogelXDestination - kogelX) && (kogelYDestination - kogelY) > 0) || ((kogelYDestination - kogelY) <= (kogelXDestination - kogelX) && (kogelYDestination - kogelY) < 0)){
@@ -203,11 +187,18 @@ if(mouseIsPressed && mouseIsClicked === false){
 
   
         kogelXSpeed = (kogelXDestination - kogelX) * (kogelYSpeed/(kogelYDestination-kogelY)); 
+        
     }
+
+console.log(kogelYSpeed);
+console.log(kogelXSpeed);
+
 
 
 
 }
+
+
 
 //beweegt de kogel naar zijn destination
 if(mouseIsClicked === true && kogelDestinationReached === false){
@@ -241,6 +232,7 @@ if (kogelDestinationReached === true && mouseIsClicked === true){
 
 }
 
+//kijkt of de kogel weer terug is bij de speler
 if(kogelX < kogelXOriginal +originalKogelSpeed && kogelX > kogelXOriginal -originalKogelSpeed && kogelY < kogelYOriginal +originalKogelSpeed && kogelY > kogelYOriginal -originalKogelSpeed && mouseIsClicked === true ){ 
     mouseIsClicked = false;
     kogelDestinationReached = false;
@@ -299,6 +291,8 @@ if(spelerY < 25){
 if(spelerY > height - 25){
     spelerY = spelerY - spelerSpeed;
 }
+
+
 };
 
 /**
@@ -307,14 +301,23 @@ if(spelerY > height - 25){
  */
 var checkVijandGeraakt = function() {
 
+    //de array die per vijand checkt of ie geraakt is
     for(var i = 0; i < vijanden.length; i++){
         
-        if(kogelX < vijandX[i] +vijandScale[i]/2 && kogelX > vijandX[i] -vijandScale[i]/2 && kogelY < vijandY[i] +vijandScale[i]/2 && kogelY > vijandY[i] -vijandScale[i]/2){
+        //kijkt of de kogel in de vijand is
+        if(kogelX < vijandX[i] +vijandScale[i]/2 && kogelX > vijandX[i] -vijandScale[i]/2 && kogelY < vijandY[i] +vijandScale[i]/2 && kogelY > vijandY[i] -vijandScale[i]/2 && mouseIsClicked === true && vijandInvinsible[i] === false){
 
                 vijandLevens[i] = vijandLevens[i] - 1;
+                vijandInvinsible[i] = true;
 
         }
-        
+
+        //kijkt of de kogel weer buiten de vijand is, zodat je de vijand niet meerdere keren kan raken terwijl de kogel in de vijand is
+        if(kogelX > vijandX[i] +vijandScale[i]/2 || kogelX < vijandX[i] -vijandScale[i]/2 && kogelY > vijandY[i] +vijandScale[i]/2 || kogelY < vijandY[i] -vijandScale[i]/2 && vijandInvinsible[i] === true){
+            vijandInvinsible[i] = false;
+        }
+
+        //delete de gegevens van de vijand als hij dood is
         if(vijandLevens[i] < 1){
                 vijanden.splice(i, 1);
                 vijandX.splice(i, 1);
@@ -322,6 +325,7 @@ var checkVijandGeraakt = function() {
                 vijandScale.splice(i, 1);
                 vijandSpeed.splice(i, 1);
                 vijandLevens.splice(i, 1);
+                vijandInvinsible.splice(i, 1);
                 i--;
         }
 
@@ -374,6 +378,7 @@ function setup() {
         vijandScale.push (random(15, 75));
         vijandSpeed.push(-0.025 * vijandScale[i] + 2.875);
         vijandLevens.push(2);
+        vijandInvinsible.push(false);
     };
 
     new Image()

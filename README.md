@@ -17,7 +17,7 @@ Basis: uitleg, spelen, afgaan en punten
 - [x] beweeg kogel
 - [x] teken vijand
 - [x] beweeg vijand
-- [ ] life system vijanden
+- [x] life system vijanden
 - [ ] life system speler
 - [ ] switching levels (als alle vijandjes dood zijn && spelerPos = x, dan Case LEVEL2)
 - [ ] game-over screen
