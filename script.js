@@ -22,8 +22,8 @@ const SPELEN = 1;
 const GAMEOVER = 2;
 var spelStatus = SPELEN;
 
-var spelerX = 200; // x-positie van speler
-var spelerY = 100; // y-positie van speler
+var spelerX = 50; // x-positie van speler
+var spelerY = 0; // y-positie van speler
 var spelerSpeed = 6; // snelheid van speler
 
 var blobvis = 0;
@@ -41,7 +41,7 @@ var kogelDestinationReached = false; // checkt of de destination van de kogel is
 
 
 
-var aantalVijanden = 100; // aantal vijanden
+var aantalVijanden = 15; // aantal vijanden
 var vijanden = []; // 
 var vijandX = [];   // array met x-posities van vijanden
 var vijandY = [];   // array met y-posities van vijanden
@@ -116,9 +116,6 @@ var tekenKogel = function(x, y) {
  */
 var tekenSpeler = function(x, y) {
   
-  //stroke("blue");
-  //noFill();
-  //ellipse(kogelXOriginal, kogelYOriginal, originalKogelSpeed *10, originalKogelSpeed *10);
 
   noStroke();
   fill("white");
@@ -218,6 +215,12 @@ if(kogelX < kogelXDestination +originalKogelSpeed && kogelX > kogelXDestination 
 
 }
 
+if(kogelX > width*1.2 || kogelX < width*-1.2 ||kogelY > height*1.2 || kogelY < height*-1.2){
+    kogelXSpeed = originalKogelSpeed;
+    kogelYSpeed = originalKogelSpeed;
+    kogelDestinationReached = true;
+}
+
 //zorgt dat de orginele positie van de kogel altijd bij de speler is
 kogelXOriginal = spelerX + 55;
 kogelYOriginal = spelerY;  
@@ -247,6 +250,9 @@ if(mouseIsClicked === false){
     kogelX = kogelXOriginal;
     kogelY = kogelYOriginal;
 }
+
+
+
 
 }
 
@@ -358,7 +364,6 @@ var checkGameOver = function() {
 
 function preload(){
     blobvis = loadImage('images/test.jpg');
-
 }
 /**
  * setup
@@ -371,9 +376,11 @@ function setup() {
   // Kleur de achtergrond blauw, zodat je het kunt zien
   background('blue');
 
+  spelerY = height/2;
+
   for(var i = 0; i < aantalVijanden; i++){
         vijanden.push("vijand"+ i);
-        vijandX.push(random(25, width - 25));
+        vijandX.push(random((width/100)*20, width - 25));
         vijandY.push(random(25, height - 25));
         vijandScale.push (random(15, 75));
         vijandSpeed.push(-0.025 * vijandScale[i] + 2.875);
