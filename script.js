@@ -41,7 +41,7 @@ var kogelDestinationReached = false; // checkt of de destination van de kogel is
 
 
 
-var aantalVijanden = 15; // aantal vijanden
+var aantalVijanden = 20; // aantal vijanden
 var vijanden = []; // 
 var vijandX = [];   // array met x-posities van vijanden
 var vijandY = [];   // array met y-posities van vijanden
@@ -380,8 +380,8 @@ function setup() {
 
   for(var i = 0; i < aantalVijanden; i++){
         vijanden.push("vijand"+ i);
-        vijandX.push(random((width/100)*20, width - 25));
-        vijandY.push(random(25, height - 25));
+        vijandX.push(random((width/100)*20, (width/100)*90));
+        vijandY.push(random((height/100)*10, (height/100)*90));
         vijandScale.push (random(15, 75));
         vijandSpeed.push(-0.025 * vijandScale[i] + 2.875);
         vijandLevens.push(2);
