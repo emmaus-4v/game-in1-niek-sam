@@ -401,7 +401,13 @@ function setup() {
  */
 function draw() {
   switch (spelStatus) {
-    case SPELEN:
+    
+    case UITLEG:
+        // Uilegscherm/startscherm
+        // Als je op "play" klikt begint de game bij het begin
+        break;
+    
+        case SPELEN:
       beweegVijand();
       beweegKogel();
       beweegSpeler();
@@ -425,6 +431,7 @@ function draw() {
         spelStatus = GAMEOVER;
       }
       break;
+      
       case GAMEOVER:
         // spelen is gestopt
         // zet groot op het scherm "game-over"
