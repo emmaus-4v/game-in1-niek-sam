@@ -30,6 +30,7 @@ var spelerInvinsible = false; // checkt of de speler invinsible is
 var invinsibleTimer = 0; // timer, duh
 
 var blobvis = 0;
+var backGround = 0;
 
 var kogelX = spelerX + 55;    // x-positie van kogel
 var kogelY = spelerY;    // y-positie van kogel
@@ -50,6 +51,7 @@ var vijandX = [];   // array met x-posities van vijanden
 var vijandY = [];   // array met y-posities van vijanden
 var vijandSpeed = []; // array met snelheden van vijanden
 var vijandScale = []; // array met sizes van vijanden
+var unroundedVijandScale = 0; // tijdelijke opslag voor de grootte van de vijand
 var vijandLevens = []; // array met het aantal levens van vijanden
 var vijandInvinsible = []; // array met of de vijand net is geraakt of niet
 
@@ -71,6 +73,7 @@ var tekenVeld = function () {
   fill("green");
   translate(0,0);
   rect(0, 0, width , height );
+  image(backGround, 0, 0, 1280, 720);
 };
 
 
@@ -389,6 +392,7 @@ var checkGameOver = function() {
 
 function preload(){
     blobvis = loadImage('images/test.jpg');
+    backGround = loadImage('images/canvas1.png');
 }
 /**
  * setup
@@ -398,6 +402,7 @@ function preload(){
 function setup() {
   // Maak een canvas (rechthoek) waarin je je speelveld kunt tekenen
   createCanvas(1280, 720);
+  
   // Kleur de achtergrond blauw, zodat je het kunt zien
   background('blue');
 
@@ -407,13 +412,29 @@ function setup() {
         vijanden.push("vijand"+ i);
         vijandX.push(random((width/100)*20, (width/100)*90));
         vijandY.push(random((height/100)*10, (height/100)*90));
-        vijandScale.push (random(15, 75));
-        vijandSpeed.push(-0.025 * vijandScale[i] + 2.875);
+
+        unroundedVijandScale = random(0.5, 3.5);
+        unroundedVijandScale = Math.round(unroundedVijandScale);
+
+    if(unroundedVijandScale === 1){
+        vijandSpeed.push(3);
         vijandLevens.push(2);
-        vijandInvinsible.push(false);
+    }
+    if(unroundedVijandScale === 2){
+        vijandSpeed.push(2);
+        vijandLevens.push(3);
+    }
+    if(unroundedVijandScale === 3){
+        vijandSpeed.push(1);
+        vijandLevens.push(4);
+    }
+    unroundedVijandScale = unroundedVijandScale*20;
+     vijandScale.push(unroundedVijandScale);
+     vijandInvinsible.push(false);
+
     };
 
-    new Image()
+    
 
   
 }
