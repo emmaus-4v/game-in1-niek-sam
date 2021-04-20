@@ -25,6 +25,9 @@ var spelStatus = SPELEN;
 var spelerX = 50; // x-positie van speler
 var spelerY = 0; // y-positie van speler
 var spelerSpeed = 6; // snelheid van speler
+var spelerLevens = 2; // hoeveelheid levens van de speler
+var spelerInvinsible = false; // checkt of de speler invinsible is
+var invinsibleTimer = 0; // timer, duh
 
 var blobvis = 0;
 
@@ -104,7 +107,7 @@ var tekenVijand = function() {
 var tekenKogel = function(x, y) {
 
     fill("blue");
-    ellipse(x, y, 10, 10)
+    ellipse(x, y, 20, 20)
 
 };
 
@@ -348,6 +351,28 @@ var checkVijandGeraakt = function() {
  */
 var checkSpelerGeraakt = function() {
     
+for(var i = 0; i < vijanden.length; i++){
+
+    if(spelerX < vijandX[i] +vijandScale[i]/2 + 25 && spelerX > vijandX[i] -vijandScale[i]/2 -25 && spelerY < vijandY[i] +vijandScale[i]/2 +25 && spelerY > vijandY[i] -vijandScale[i]/2 -25 && spelerInvinsible === false){
+                spelerLevens = spelerLevens - 1;
+                spelerInvinsible = true;
+    }
+
+    if(spelerInvinsible === true && invinsibleTimer < 150){
+        invinsibleTimer = invinsibleTimer + 1;
+    }
+
+    if(spelerInvinsible === true && invinsibleTimer > 150){
+        spelerInvinsible = false;
+        invinsibleTimer = 0;
+    }
+
+    if(spelerLevens < 1){
+        spelerX = 10000;
+    }
+
+}
+
   return false;
 };
 
