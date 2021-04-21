@@ -384,11 +384,12 @@ for(var i = 0; i < vijanden.length; i++){
 
     if(spelerInvinsible === true && invinsibleTimer > 150 /*fr*3*/){
         spelerInvinsible = false;
-        invinsibleTimer = 0;
     }
 
-    if(spelerLevens < 1){
-        spelerX = 10000;
+    if(spelerLevens === 0){
+        spelerX = 200;
+        spelerY = 200;
+        //spelStatus = GAMEOVER
     }
     console.log(spelerX)
 
