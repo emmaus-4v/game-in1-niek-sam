@@ -361,17 +361,19 @@ for(var i = 0; i < vijanden.length; i++){
                 spelerInvinsible = true;
     }
 
-    if(spelerInvinsible === true && invinsibleTimer < 150){
-        invinsibleTimer = invinsibleTimer + 1;
+    if(spelerInvinsible === true){
+        invinsibleTimer = 150;
+        invinsibleTimer = invinsibleTimer - 1;
     }
 
-    if(spelerInvinsible === true && invinsibleTimer > 150){
+    if(invinsibleTimer === 0){
         spelerInvinsible = false;
-        invinsibleTimer = 0;
     }
 
-    if(spelerLevens < 1){
-        spelerX = 10000;
+    if(spelerLevens === 0){
+        spelerX = 200;
+        spelerY = 200;
+        //spelStatus = GAMEOVER
     }
 
 }
