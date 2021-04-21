@@ -22,9 +22,14 @@ const SPELEN = 1;
 const GAMEOVER = 2;
 var spelStatus = SPELEN;
 
+var LEFT = 0;
+var RIGHT = 1;
+
+//let fr = 12;
+
 var spelerX = 50; // x-positie van speler
 var spelerY = 0; // y-positie van speler
-var spelerSpeed = 6; // snelheid van speler
+var spelerSpeed = 20; // snelheid van speler
 var spelerLevens = 2; // hoeveelheid levens van de speler
 var spelerInvinsible = false; // checkt of de speler invinsible is
 var invinsibleTimer = 0; // timer, duh
@@ -38,9 +43,9 @@ var kogelXOriginal = spelerX + 55;    // x-positie van kogel
 var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
-var originalKogelSpeed = 8 ; // snelheid van de kogel
-var kogelXSpeed = 6; // x snelheid van kogel
-var kogelYSpeed = 6; // y snelheid van kogel
+var originalKogelSpeed = 25 ; // snelheid van de kogel
+var kogelXSpeed = 25; // x snelheid van kogel
+var kogelYSpeed = 25; // y snelheid van kogel
 var kogelDestinationReached = false; // checkt of de destination van de kogel is bereikt
 
 
@@ -54,6 +59,7 @@ var vijandScale = []; // array met sizes van vijanden
 var unroundedVijandScale = 0; // tijdelijke opslag voor de grootte van de vijand
 var vijandLevens = []; // array met het aantal levens van vijanden
 var vijandInvinsible = []; // array met of de vijand net is geraakt of niet
+var vijandDirection = [];
 
 var score = 0; // aantal behaalde punten
 
@@ -96,7 +102,14 @@ var tekenVijand = function() {
         rect(vijandX[i], vijandY[i] - vijandScale[i]*0.2, vijandScale[i], vijandScale[i]*0.4);
         }
 
-     
+        if(vijandDirection[i] === LEFT){
+            //doe de animatie van links
+        }
+
+        if(vijandDirection[i] === RIGHT){
+            //doe de animatie van rechts
+        }
+
     };
 
 };
@@ -140,10 +153,12 @@ var beweegVijand = function() {
 for(var i = 0; i < vijandX.length; i++){
     if(spelerX > vijandX[i] ){
         vijandX[i] = vijandX[i] + vijandSpeed[i];
+        vijandDirection[i] = RIGHT;
     }
 
     if(spelerX < vijandX[i]){
         vijandX[i] = vijandX[i] - vijandSpeed[i];
+        vijandDirection[i] = LEFT;
     }
 }
 for(var i = 0; i < vijandY.length; i++){
@@ -221,7 +236,7 @@ if(kogelX < kogelXDestination +originalKogelSpeed && kogelX > kogelXDestination 
 
 }
 
-if(kogelX > width*1.2 || kogelX < width*-1.2 ||kogelY > height*1.2 || kogelY < height*-1.2){
+if(kogelX > width -10 || kogelX < 10 ||kogelY > height -10 || kogelY < 10){
     kogelXSpeed = originalKogelSpeed;
     kogelYSpeed = originalKogelSpeed;
     kogelDestinationReached = true;
@@ -338,6 +353,7 @@ var checkVijandGeraakt = function() {
                 vijandSpeed.splice(i, 1);
                 vijandLevens.splice(i, 1);
                 vijandInvinsible.splice(i, 1);
+                vijandDirection.splice(i, 1);
                 i--;
         }
 
@@ -360,12 +376,13 @@ for(var i = 0; i < vijanden.length; i++){
                 spelerLevens = spelerLevens - 1;
                 spelerInvinsible = true;
     }
+    console.log(spelerLevens);
 
-    if(spelerInvinsible === true && invinsibleTimer < 150){
+    if(spelerInvinsible === true && invinsibleTimer < 150 /*fr*3*/){
         invinsibleTimer = invinsibleTimer + 1;
     }
 
-    if(spelerInvinsible === true && invinsibleTimer > 150){
+    if(spelerInvinsible === true && invinsibleTimer > 150 /*fr*3*/){
         spelerInvinsible = false;
         invinsibleTimer = 0;
     }
@@ -373,6 +390,7 @@ for(var i = 0; i < vijanden.length; i++){
     if(spelerLevens < 1){
         spelerX = 10000;
     }
+    console.log(spelerX)
 
 }
 
@@ -401,6 +419,9 @@ function preload(){
  */
 function setup() {
   // Maak een canvas (rechthoek) waarin je je speelveld kunt tekenen
+  
+  //frameRate(fr);
+  
   createCanvas(1280, 720);
   
   // Kleur de achtergrond blauw, zodat je het kunt zien
@@ -412,20 +433,21 @@ function setup() {
         vijanden.push("vijand"+ i);
         vijandX.push(random((width/100)*20, (width/100)*90));
         vijandY.push(random((height/100)*10, (height/100)*90));
+        vijandDirection.push(LEFT);
 
         unroundedVijandScale = random(0.5, 3.5);
         unroundedVijandScale = Math.round(unroundedVijandScale);
 
     if(unroundedVijandScale === 1){
-        vijandSpeed.push(3);
+        vijandSpeed.push(15);
         vijandLevens.push(2);
     }
     if(unroundedVijandScale === 2){
-        vijandSpeed.push(2);
+        vijandSpeed.push(10);
         vijandLevens.push(3);
     }
     if(unroundedVijandScale === 3){
-        vijandSpeed.push(1);
+        vijandSpeed.push(5);
         vijandLevens.push(4);
     }
     unroundedVijandScale = unroundedVijandScale*20;
