@@ -22,20 +22,38 @@ const SPELEN = 1;
 const GAMEOVER = 2;
 var spelStatus = SPELEN;
 
+var animatieKlok = 0;
+
 var LEFT = 0;
 var RIGHT = 1;
 
-//let fr = 12;
-
 var spelerX = 50; // x-positie van speler
 var spelerY = 0; // y-positie van speler
-var spelerSpeed = 20; // snelheid van speler
+var spelerSpeed = 6; // snelheid van speler
 var spelerLevens = 2; // hoeveelheid levens van de speler
 var spelerInvinsible = false; // checkt of de speler invinsible is
 var invinsibleTimer = 0; // timer, duh
 
 var blobvis = 0;
 var backGround = 0;
+var smallSlimeLeftFrame1 = 0;
+var smallSlimeLeftFrame2 = 0;
+var smallSlimeRightFrame1 = 0;
+var smallSlimeRightFrame2 = 0;
+
+var mediumSlimeLeftFrame1 = 0;
+var mediumSlimeLeftFrame2 = 0;
+var mediumSlimeLeftFrame3 = 0;
+var mediumSlimeRightFrame1 = 0;
+var mediumSlimeRightFrame2 = 0;
+var mediumSlimeRightFrame3 = 0;
+
+var largeSlimeLeftFrame1 = 0;
+var largeSlimeLeftFrame2 = 0;
+var largeSlimeLeftFrame3 = 0;
+var largeSlimeRightFrame1 = 0;
+var largeSlimeRightFrame2 = 0;
+var largeSlimeRightFrame3 = 0;
 
 var kogelX = spelerX + 55;    // x-positie van kogel
 var kogelY = spelerY;    // y-positie van kogel
@@ -43,9 +61,9 @@ var kogelXOriginal = spelerX + 55;    // x-positie van kogel
 var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
-var originalKogelSpeed = 25 ; // snelheid van de kogel
-var kogelXSpeed = 25; // x snelheid van kogel
-var kogelYSpeed = 25; // y snelheid van kogel
+var originalKogelSpeed = 8 ; // snelheid van de kogel
+var kogelXSpeed = 8; // x snelheid van kogel
+var kogelYSpeed = 8; // y snelheid van kogel
 var kogelDestinationReached = false; // checkt of de destination van de kogel is bereikt
 
 
@@ -56,10 +74,11 @@ var vijandX = [];   // array met x-posities van vijanden
 var vijandY = [];   // array met y-posities van vijanden
 var vijandSpeed = []; // array met snelheden van vijanden
 var vijandScale = []; // array met sizes van vijanden
-var unroundedVijandScale = 0; // tijdelijke opslag voor de grootte van de vijand
+var temporaryVijandscale = 0; // tijdelijke opslag voor de grootte van de vijand
 var vijandLevens = []; // array met het aantal levens van vijanden
 var vijandInvinsible = []; // array met of de vijand net is geraakt of niet
 var vijandDirection = [];
+var vijandSize = [];
 
 var score = 0; // aantal behaalde punten
 
@@ -82,6 +101,18 @@ var tekenVeld = function () {
   image(backGround, 0, 0, 1280, 720);
 };
 
+//
+var animatieTimer = function () {
+
+animatieKlok = animatieKlok+1;
+
+if(animatieKlok === 21){
+animatieKlok = 0;
+}
+
+
+};
+
 
 /**
  * Tekent de vijand
@@ -90,26 +121,78 @@ var tekenVijand = function() {
 
     for(var i = 0; i < vijanden.length; i++){
         
-        
-        fill("yellow");
-        ellipse(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]);
-        rect(vijandX[i], vijandY[i] - vijandScale[i]*0.2, vijandScale[i], vijandScale[i]*0.4);
-
-        //veranderd de kleur van de vijand als hij zijn tweede leven kwijt is
-        if(vijandLevens[i] === 1){
-        fill("red");
-        ellipse(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]);
-        rect(vijandX[i], vijandY[i] - vijandScale[i]*0.2, vijandScale[i], vijandScale[i]*0.4);
-        }
-
         if(vijandDirection[i] === LEFT){
-            //doe de animatie van links
-        }
-
+            if(vijandSize[i] === 1){
+                if(animatieKlok < 12.6 ){
+                    image(smallSlimeLeftFrame1, vijandX[i], vijandY[i], vijandScale[i]);
+        
+                };
+                if(animatieKlok > 12.6 ){
+                    image(smallSlimeLeftFrame2, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+            };
+            if(vijandSize[i] === 2){
+                if(animatieKlok < 8.2 ){
+                    image(mediumSlimeLeftFrame1, vijandX[i], vijandY[i], vijandScale[i]);
+        
+                };
+                if(animatieKlok > 8.2 && animatieKlok < 12.6 ){
+                    image(mediumSlimeLeftFrame2, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+                if(animatieKlok > 12.6 ){
+                    image(mediumSlimeLeftFrame3, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+            };
+            if(vijandSize[i] === 3){
+                if(animatieKlok < 8.2 ){
+                    image(largeSlimeLeftFrame1, vijandX[i], vijandY[i], vijandScale[i]);
+        
+                };
+                if(animatieKlok > 8.2 && animatieKlok < 12.6 ){
+                    image(largeSlimeLeftFrame2, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+                if(animatieKlok > 12.6 ){
+                    image(largeSlimeLeftFrame3, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+            };
+        };
+        
         if(vijandDirection[i] === RIGHT){
-            //doe de animatie van rechts
+            if(vijandSize[i] === 1){
+                if(animatieKlok < 12.6 ){
+                    image(smallSlimeRightFrame1, vijandX[i], vijandY[i], vijandScale[i]);
+        
+                };
+                if(animatieKlok > 12.6 ){
+                    image(smallSlimeRightFrame2, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+            };
+            if(vijandSize[i] === 2){
+                if(animatieKlok < 8.2 ){
+                    image(mediumSlimeRightFrame1, vijandX[i], vijandY[i], vijandScale[i]);
+        
+                };
+                if(animatieKlok > 8.2 && animatieKlok < 12.6 ){
+                    image(mediumSlimeRightFrame2, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+                if(animatieKlok > 12.6 ){
+                    image(mediumSlimeRightFrame3, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+            };
+            if(vijandSize[i] === 3){
+                if(animatieKlok < 8.2 ){
+                    image(largeSlimeRightFrame1, vijandX[i], vijandY[i], vijandScale[i]);
+        
+                };
+                if(animatieKlok > 8.2 && animatieKlok < 12.6 ){
+                    image(largeSlimeRightFrame2, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+                if(animatieKlok > 12.6 ){
+                    image(largeSlimeRightFrame3, vijandX[i], vijandY[i], vijandScale[i]);
+                };
+            };
         }
-
+        
     };
 
 };
@@ -354,6 +437,7 @@ var checkVijandGeraakt = function() {
                 vijandLevens.splice(i, 1);
                 vijandInvinsible.splice(i, 1);
                 vijandDirection.splice(i, 1);
+                vijandSize.splice(i, 1);
                 i--;
         }
 
@@ -378,11 +462,11 @@ for(var i = 0; i < vijanden.length; i++){
     }
     console.log(spelerLevens);
 
-    if(spelerInvinsible === true && invinsibleTimer < 150 /*fr*3*/){
+    if(spelerInvinsible === true && invinsibleTimer < 150){
         invinsibleTimer = invinsibleTimer + 1;
     }
 
-    if(spelerInvinsible === true && invinsibleTimer > 150 /*fr*3*/){
+    if(spelerInvinsible === true && invinsibleTimer > 150 ){
         spelerInvinsible = false;
     }
 
@@ -412,6 +496,25 @@ var checkGameOver = function() {
 function preload(){
     blobvis = loadImage('images/test.jpg');
     backGround = loadImage('images/canvas1.png');
+
+    smallSlimeLeftFrame1 = loadImage('images/small slime left frame 1.png');
+    smallSlimeLeftFrame2 = loadImage('images/small slime left frame2.png');
+    smallSlimeRightFrame1 = loadImage('images/small slime right frame1.png');
+    smallSlimeRightFrame2 = loadImage('images/small slime right frame2.png');
+
+    mediumSlimeLeftFrame1 = loadImage('images/medium slime left frame1.png');
+    mediumSlimeLeftFrame2 = loadImage('images/medium slime left frame2.png');
+    mediumSlimeLeftFrame3 = loadImage('images/medium slime left frame3.png');
+    mediumSlimeRightFrame1 = loadImage('images/medium slime right frame1.png');
+    mediumSlimeRightFrame2 = loadImage('images/medium slime right frame2.png');
+    mediumSlimeRightFrame3 = loadImage('images/medium slime right frame3.png');
+
+    largeSlimeLeftFrame1 = loadImage('images/large slime left frame1.png');
+    largeSlimeLeftFrame2 = loadImage('images/large slime left frame2.png');
+    largeSlimeLeftFrame3 = loadImage('images/large slime left frame3.png');
+    largeSlimeRightFrame1 = loadImage('images/large slime right frame1.png');
+    largeSlimeRightFrame2 = loadImage('images/large slime right frame2.png');
+    largeSlimeRightFrame3 = loadImage('images/large slime right frame3.png');
 }
 /**
  * setup
@@ -436,24 +539,27 @@ function setup() {
         vijandY.push(random((height/100)*10, (height/100)*90));
         vijandDirection.push(LEFT);
 
-        unroundedVijandScale = random(0.5, 3.5);
-        unroundedVijandScale = Math.round(unroundedVijandScale);
+        temporaryVijandscale = random(0.5, 3.5);
+        temporaryVijandscale = Math.round(temporaryVijandscale);
 
-    if(unroundedVijandScale === 1){
-        vijandSpeed.push(15);
+    if(temporaryVijandscale === 1){
+        vijandSpeed.push(1);
         vijandLevens.push(2);
+        vijandScale.push(50);
     }
-    if(unroundedVijandScale === 2){
-        vijandSpeed.push(10);
+    if(temporaryVijandscale === 2){
+        vijandSpeed.push(2);
         vijandLevens.push(3);
+        vijandScale.push(90);
     }
-    if(unroundedVijandScale === 3){
-        vijandSpeed.push(5);
+    if(temporaryVijandscale === 3){
+        vijandSpeed.push(3);
         vijandLevens.push(4);
+        vijandScale.push(130);
     }
-    unroundedVijandScale = unroundedVijandScale*20;
-     vijandScale.push(unroundedVijandScale);
-     vijandInvinsible.push(false);
+    vijandSize.push(temporaryVijandscale);
+    
+    vijandInvinsible.push(false);
 
     };
 
@@ -477,6 +583,7 @@ function draw() {
         break;
     
         case SPELEN:
+      animatieTimer();
       beweegVijand();
       beweegKogel();
       beweegSpeler();
