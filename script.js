@@ -22,15 +22,16 @@ const SPELEN = 1;
 const GAMEOVER = 2;
 var spelStatus = SPELEN;
 
-var animatieKlok = 0;
 
-var LEFT = 0;
-var RIGHT = 1;
+const LEFT = 0;
+const RIGHT = 1;
+
+var animatieKlok = 0;
 
 var spelerX = 50; // x-positie van speler
 var spelerY = 0; // y-positie van speler
 var spelerSpeed = 6; // snelheid van speler
-var spelerLevens = 2; // hoeveelheid levens van de speler
+var spelerLevens = 10; // hoeveelheid levens van de speler
 var spelerInvinsible = false; // checkt of de speler invinsible is
 var invinsibleTimer = 0; // timer, duh
 
@@ -68,7 +69,7 @@ var kogelDestinationReached = false; // checkt of de destination van de kogel is
 
 
 
-var aantalVijanden = 20; // aantal vijanden
+var aantalVijanden = 4; // aantal vijanden
 var vijanden = []; // 
 var vijandX = [];   // array met x-posities van vijanden
 var vijandY = [];   // array met y-posities van vijanden
@@ -80,7 +81,13 @@ var vijandInvinsible = []; // array met of de vijand net is geraakt of niet
 var vijandDirection = [];
 var vijandSize = [];
 
-var score = 0; // aantal behaalde punten
+
+var kamer = 1;
+var vijandPunten = 0; // aantal behaalde punten voor het aantal verslagen vijandjes (+x per small enemy, +x per medium enemy, +x per large enemy)
+var kamerPunten = 0; // aantal behaalde punten voor het aantal verslagen levels (+x per roomY)
+var tijdPunten = 6000; // aantal behaalde punten voor de snelheid hav het clearen van rooms (-50 per seconde, na 2 minuten 0 punten erbij)
+
+var score = 0; // alle scores opgeteld
 
 var mouseIsClicked = false; // checkt of de muis is ingedrukt
 
@@ -99,6 +106,16 @@ var tekenVeld = function () {
   translate(0,0);
   rect(0, 0, width , height );
   image(backGround, 0, 0, 1280, 720);
+};
+
+var scores = function () {
+
+    text("room: " + kamer, 20, 20, 100, 50);
+    text("score: " + score, 120, 20, 100, 50);
+    text("enemies: " + vijandPunten, 220, 20, 100, 50);
+    text("time: " + tijdPunten, 320, 20, 100, 50);
+    
+
 };
 
 //
@@ -120,6 +137,8 @@ animatieKlok = 0;
 var tekenVijand = function() {
 
     for(var i = 0; i < vijanden.length; i++){
+
+        rect(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]/2);
         
         if(vijandDirection[i] === LEFT){
             if(vijandSize[i] === 1){
@@ -291,9 +310,6 @@ if(mouseIsPressed && mouseIsClicked === false){
         
     }
 
-console.log(kogelYSpeed);
-console.log(kogelXSpeed);
-
 
 
 
@@ -415,7 +431,7 @@ var checkVijandGeraakt = function() {
     for(var i = 0; i < vijanden.length; i++){
         
         //kijkt of de kogel in de vijand is
-        if(kogelX < vijandX[i] +vijandScale[i]/2 && kogelX > vijandX[i] -vijandScale[i]/2 && kogelY < vijandY[i] +vijandScale[i]/2 && kogelY > vijandY[i] -vijandScale[i]/2 && mouseIsClicked === true && vijandInvinsible[i] === false){
+        if(kogelX < vijandX[i] +vijandScale[i] && kogelX > vijandX[i] && kogelY < vijandY[i] +vijandScale[i]/2 && kogelY > vijandY[i] && mouseIsClicked === true && vijandInvinsible[i] === false){
 
                 vijandLevens[i] = vijandLevens[i] - 1;
                 vijandInvinsible[i] = true;
@@ -423,12 +439,23 @@ var checkVijandGeraakt = function() {
         }
 
         //kijkt of de kogel weer buiten de vijand is, zodat je de vijand niet meerdere keren kan raken terwijl de kogel in de vijand is
-        if(kogelX > vijandX[i] +vijandScale[i]/2 || kogelX < vijandX[i] -vijandScale[i]/2 && kogelY > vijandY[i] +vijandScale[i]/2 || kogelY < vijandY[i] -vijandScale[i]/2 && vijandInvinsible[i] === true){
+        if(kogelX > vijandX[i] +vijandScale[i] || kogelX < vijandX[i] && kogelY > vijandY[i] +vijandScale[i]/2 || kogelY < vijandY[i] && vijandInvinsible[i] === true){
             vijandInvinsible[i] = false;
         }
 
         //delete de gegevens van de vijand als hij dood is
         if(vijandLevens[i] < 1){
+
+                if(vijandSize[i] = 1){
+                    vijandPunten = vijandPunten + 50;
+                }
+                if(vijandSize[i] = 2){
+                    vijandPunten = vijandPunten + 100;
+                }
+                if(vijandSize[i] = 3){
+                    vijandPunten = vijandPunten + 150;
+                }
+
                 vijanden.splice(i, 1);
                 vijandX.splice(i, 1);
                 vijandY.splice(i, 1);
@@ -454,30 +481,34 @@ var checkVijandGeraakt = function() {
  */
 var checkSpelerGeraakt = function() {
     
+    
+    
 for(var i = 0; i < vijanden.length; i++){
-
-    if(spelerX < vijandX[i] +vijandScale[i]/2 + 25 && spelerX > vijandX[i] -vijandScale[i]/2 -25 && spelerY < vijandY[i] +vijandScale[i]/2 +25 && spelerY > vijandY[i] -vijandScale[i]/2 -25 && spelerInvinsible === false){
+    
+    
+    if(spelerX < vijandX[i] +vijandScale[i] + 25 && spelerX > vijandX[i] -25 && spelerY < vijandY[i] +vijandScale[i] +25 && spelerY > vijandY[i] -25 && spelerInvinsible === false){
                 spelerLevens = spelerLevens - 1;
                 spelerInvinsible = true;
     }
-    console.log(spelerLevens);
-
-    if(spelerInvinsible === true && invinsibleTimer < 150){
-        invinsibleTimer = invinsibleTimer + 1;
-    }
-
-    if(spelerInvinsible === true && invinsibleTimer > 150 ){
-        spelerInvinsible = false;
-    }
-
-    if(spelerLevens === 0){
-        spelerX = 200;
-        spelerY = 200;
-        //spelStatus = GAMEOVER
-    }
-    console.log(spelerX)
+   
 
 }
+
+while(spelerInvinsible === true && invinsibleTimer < 150){
+    invinsibleTimer = invinsibleTimer + 1;
+
+}
+
+    if(spelerInvinsible === true && invinsibleTimer >= 150 ){
+        spelerInvinsible = false;
+        invinsibleTimer = 0;
+    } 
+
+    
+   
+
+
+
 
   return false;
 };
@@ -488,7 +519,9 @@ for(var i = 0; i < vijanden.length; i++){
  * @returns {boolean} true als het spel is afgelopen
  */
 var checkGameOver = function() {
-    
+    if(spelerLevens === 0){
+    return true;
+    }
   return false;
 };
 
@@ -529,13 +562,15 @@ function setup() {
   createCanvas(1280, 720);
   
   // Kleur de achtergrond blauw, zodat je het kunt zien
-  background('blue');
+  background(73, 57, 38, 1);
+
+  aantalVijanden = kamer + 4;
 
   spelerY = height/2;
 
   for(var i = 0; i < aantalVijanden; i++){
         vijanden.push("vijand"+ i);
-        vijandX.push(random((width/100)*20, (width/100)*90));
+        vijandX.push(random((width/100)*40, (width/100)*90));
         vijandY.push(random((height/100)*10, (height/100)*90));
         vijandDirection.push(LEFT);
 
@@ -546,16 +581,19 @@ function setup() {
         vijandSpeed.push(1);
         vijandLevens.push(2);
         vijandScale.push(50);
+
     }
     if(temporaryVijandscale === 2){
         vijandSpeed.push(2);
         vijandLevens.push(3);
         vijandScale.push(90);
+        
     }
     if(temporaryVijandscale === 3){
         vijandSpeed.push(3);
         vijandLevens.push(4);
         vijandScale.push(130);
+
     }
     vijandSize.push(temporaryVijandscale);
     
@@ -588,6 +626,8 @@ function draw() {
       beweegKogel();
       beweegSpeler();
       
+      
+
       if (checkVijandGeraakt()) {
         // punten erbij
         // nieuwe vijand maken
@@ -602,6 +642,29 @@ function draw() {
       tekenVijand();
       tekenSpeler(spelerX, spelerY);
       tekenKogel(kogelX, kogelY);
+      scores();  
+
+      if (vijanden.length > 0){
+          tijdPunten = tijdPunten -1;
+      }
+      
+      if (vijanden.length === 0 && keyIsDown(69)){
+        kamerPunten = kamer * 500;
+        score = score + tijdPunten + kamerPunten + vijandPunten;
+
+        kamer = kamer + 1;
+        setup();
+        
+        vijandPunten = 0;
+        kamerPunten = 0;
+        tijdPunten = 6000;
+        
+        spelerX = 50;
+        spelerInvinsible = false; // checkt of de speler invinsible is
+        invinsibleTimer = 0; // timer, duh
+        spelerLevens = 10; // hoeveelheid levens van de speler
+
+      } 
 
       if (checkGameOver()) {
         spelStatus = GAMEOVER;
@@ -613,6 +676,35 @@ function draw() {
         // zet groot op het scherm "game-over"
         // kijk of er een toets is ingedrukt, zoja, maak dan de status UITLEG
         // vergeet niet om alle variabelen weer te resetten
+
+    if(keyIsDown(69)){
+
+        for(var i = 0; i < vijanden.length; i++){
+                vijanden.splice(i, 1);
+                vijandX.splice(i, 1);
+                vijandY.splice(i, 1);
+                vijandScale.splice(i, 1);
+                vijandSpeed.splice(i, 1);
+                vijandLevens.splice(i, 1);
+                vijandInvinsible.splice(i, 1);
+                vijandDirection.splice(i, 1);
+                vijandSize.splice(i, 1);
+                i--;
+        }
+
+        kamer = 1;
+        setup();
+        
+        vijandPunten = 0;
+        kamerPunten = 0;
+        tijdPunten = 6000;
+        score = 0;
+        spelerX = 50;
+        spelerInvinsible = false; // checkt of de speler invinsible is
+        invinsibleTimer = 0; // timer, duh
+        spelerLevens = 10; // hoeveelheid levens van de speler
+        spelStatus = SPELEN;
+    }   
       break;
    
   }
