@@ -28,7 +28,7 @@ const RIGHT = 1;
 
 var animatieKlok = 0;
 
-var spelerX = 50; // x-positie van speler
+var spelerX = 65; // x-positie van speler
 var spelerY = 0; // y-positie van speler
 var spelerSpeed = 6; // snelheid van speler
 var spelerLevens = 10; // hoeveelheid levens van de speler
@@ -62,7 +62,7 @@ var kogelXOriginal = spelerX + 55;    // x-positie van kogel
 var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
-var originalKogelSpeed = 8 ; // snelheid van de kogel
+var originalKogelSpeed = 11 ; // snelheid van de kogel
 var kogelXSpeed = 8; // x snelheid van kogel
 var kogelYSpeed = 8; // y snelheid van kogel
 var kogelDestinationReached = false; // checkt of de destination van de kogel is bereikt
@@ -85,7 +85,7 @@ var vijandSize = [];
 var kamer = 1;
 var vijandPunten = 0; // aantal behaalde punten voor het aantal verslagen vijandjes (+x per small enemy, +x per medium enemy, +x per large enemy)
 var kamerPunten = 0; // aantal behaalde punten voor het aantal verslagen levels (+x per roomY)
-var tijdPunten = 6000; // aantal behaalde punten voor de snelheid hav het clearen van rooms (-50 per seconde, na 2 minuten 0 punten erbij)
+var tijdPunten = 3000; // aantal behaalde punten voor de snelheid hav het clearen van rooms (-50 per seconde, na 1 minuut 0 punten erbij)
 
 var score = 0; // alle scores opgeteld
 
@@ -110,10 +110,15 @@ var tekenVeld = function () {
 
 var scores = function () {
 
-    text("room: " + kamer, 20, 20, 100, 50);
-    text("score: " + score, 120, 20, 100, 50);
-    text("enemies: " + vijandPunten, 220, 20, 100, 50);
-    text("time: " + tijdPunten, 320, 20, 100, 50);
+    textSize(30);
+    textFont("fantasy");
+    fill("white");
+    text("room: " + kamer, (width/8)*2, 20, 500, 500);
+    text("time: " + tijdPunten,  (width/8)*2.7, 20, 500, 500);
+    text("room bonus: " + kamerPunten,  (width/8)*3.65, 20, 500, 500);
+    text("enemies: " + vijandPunten,  (width/8)*5.4, 20, 500, 500);
+    text("score: " + score,  (width/8)*6.65, 20, 500, 500);
+    
     
 
 };
@@ -138,7 +143,8 @@ var tekenVijand = function() {
 
     for(var i = 0; i < vijanden.length; i++){
 
-        rect(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]/2);
+        //rect(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]/2);
+        //rect(vijandX[i] - 25, vijandY[i] -25, vijandScale[i] + 50, vijandScale[i]/2 +50);
         
         if(vijandDirection[i] === LEFT){
             if(vijandSize[i] === 1){
@@ -446,14 +452,14 @@ var checkVijandGeraakt = function() {
         //delete de gegevens van de vijand als hij dood is
         if(vijandLevens[i] < 1){
 
-                if(vijandSize[i] = 1){
+                if(vijandSize[i] === 1){
                     vijandPunten = vijandPunten + 50;
                 }
-                if(vijandSize[i] = 2){
-                    vijandPunten = vijandPunten + 100;
-                }
-                if(vijandSize[i] = 3){
+                if(vijandSize[i] === 2){
                     vijandPunten = vijandPunten + 150;
+                }
+                if(vijandSize[i] === 3){
+                    vijandPunten = vijandPunten + 300;
                 }
 
                 vijanden.splice(i, 1);
@@ -486,7 +492,7 @@ var checkSpelerGeraakt = function() {
 for(var i = 0; i < vijanden.length; i++){
     
     
-    if(spelerX < vijandX[i] +vijandScale[i] + 25 && spelerX > vijandX[i] -25 && spelerY < vijandY[i] +vijandScale[i] +25 && spelerY > vijandY[i] -25 && spelerInvinsible === false){
+    if(spelerX < vijandX[i] +vijandScale[i] + 25 && spelerX > vijandX[i] -25 && spelerY < vijandY[i] +vijandScale[i]/2 +25 && spelerY > vijandY[i] -25 && spelerInvinsible === false){
                 spelerLevens = spelerLevens - 1;
                 spelerInvinsible = true;
     }
@@ -579,7 +585,7 @@ function setup() {
 
     if(temporaryVijandscale === 1){
         vijandSpeed.push(1);
-        vijandLevens.push(2);
+        vijandLevens.push(1);
         vijandScale.push(50);
 
     }
@@ -590,7 +596,7 @@ function setup() {
         
     }
     if(temporaryVijandscale === 3){
-        vijandSpeed.push(3);
+        vijandSpeed.push(2.5);
         vijandLevens.push(4);
         vijandScale.push(130);
 
@@ -647,9 +653,10 @@ function draw() {
       if (vijanden.length > 0){
           tijdPunten = tijdPunten -1;
       }
+      kamerPunten = kamer * 400;
       
       if (vijanden.length === 0 && keyIsDown(69)){
-        kamerPunten = kamer * 500;
+        
         score = score + tijdPunten + kamerPunten + vijandPunten;
 
         kamer = kamer + 1;
@@ -657,9 +664,9 @@ function draw() {
         
         vijandPunten = 0;
         kamerPunten = 0;
-        tijdPunten = 6000;
+        tijdPunten = 3000;
         
-        spelerX = 50;
+        spelerX = 65;
         spelerInvinsible = false; // checkt of de speler invinsible is
         invinsibleTimer = 0; // timer, duh
         spelerLevens = 10; // hoeveelheid levens van de speler
@@ -697,9 +704,9 @@ function draw() {
         
         vijandPunten = 0;
         kamerPunten = 0;
-        tijdPunten = 6000;
+        tijdPunten = 3000;
         score = 0;
-        spelerX = 50;
+        spelerX = 65;
         spelerInvinsible = false; // checkt of de speler invinsible is
         invinsibleTimer = 0; // timer, duh
         spelerLevens = 10; // hoeveelheid levens van de speler

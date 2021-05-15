@@ -19,18 +19,18 @@ Basis: uitleg, spelen, afgaan en punten
 - [x] beweeg vijand
 - [x] life system vijanden
 - [ ] life system speler
-- [ ] switching levels (als alle vijandjes dood zijn && spelerPos = x, dan Case LEVEL2)
+- [x] switching levels (als alle vijandjes dood zijn && spelerPos = x, dan Case LEVEL2)
 - [ ] game-over screen
 - [ ] meer levels maken
-- [ ] punten op scherm zetten
-- [ ] punten kunnen scoren
+- [x] punten op scherm zetten
+- [x] punten kunnen scoren
 - [ ] uitlegscherm
 
 uiterlijk van de game
 - [ ] leuke speler maken
 - [ ] wapen maken
 - [ ] mooie achtergrond
-- [ ] vijanden die er uit zien als vijanden en niet als gekleurde kanonnen
+- [x] vijanden die er uit zien als vijanden en niet als gekleurde kanonnen
 
 DLC content
 - [ ] Traps
