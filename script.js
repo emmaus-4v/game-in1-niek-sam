@@ -34,9 +34,15 @@ var spelerSpeed = 6; // snelheid van speler
 var spelerLevens = 10; // hoeveelheid levens van de speler
 var spelerInvinsible = false; // checkt of de speler invinsible is
 var invinsibleTimer = 0; // timer, duh
+var spelerDirection = RIGHT;
 
-var blobvis = 0;
+var protagonistRightFrame1 = 0;
+var protagonistLeftFrame1 = 0;
+
+var kogelFrame1 = 0;
+
 var backGround = 0;
+
 var smallSlimeLeftFrame1 = 0;
 var smallSlimeLeftFrame2 = 0;
 var smallSlimeRightFrame1 = 0;
@@ -56,15 +62,15 @@ var largeSlimeRightFrame1 = 0;
 var largeSlimeRightFrame2 = 0;
 var largeSlimeRightFrame3 = 0;
 
-var kogelX = spelerX + 55;    // x-positie van kogel
+var kogelX = spelerX + 65;    // x-positie van kogel
 var kogelY = spelerY;    // y-positie van kogel
-var kogelXOriginal = spelerX + 55;    // x-positie van kogel
+var kogelXOriginal = spelerX + 65;    // x-positie van kogel
 var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
 var originalKogelSpeed = 11 ; // snelheid van de kogel
-var kogelXSpeed = 8; // x snelheid van kogel
-var kogelYSpeed = 8; // y snelheid van kogel
+var kogelXSpeed = 11; // x snelheid van kogel
+var kogelYSpeed = 11; // y snelheid van kogel
 var kogelDestinationReached = false; // checkt of de destination van de kogel is bereikt
 
 
@@ -114,8 +120,8 @@ var scores = function () {
     textFont("fantasy");
     fill("white");
     text("room: " + kamer, (width/8)*2, 20, 500, 500);
-    text("time: " + tijdPunten,  (width/8)*2.7, 20, 500, 500);
-    text("room bonus: " + kamerPunten,  (width/8)*3.65, 20, 500, 500);
+    text("time: " + tijdPunten,  (width/8)*2.75, 20, 500, 500);
+    text("room bonus: " + kamerPunten,  (width/8)*3.7, 20, 500, 500);
     text("enemies: " + vijandPunten,  (width/8)*5.4, 20, 500, 500);
     text("score: " + score,  (width/8)*6.65, 20, 500, 500);
     
@@ -144,7 +150,7 @@ var tekenVijand = function() {
     for(var i = 0; i < vijanden.length; i++){
 
         //rect(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]/2);
-        //rect(vijandX[i] - 25, vijandY[i] -25, vijandScale[i] + 50, vijandScale[i]/2 +50);
+        //rect(vijandX[i] - 40, vijandY[i] - 75, (vijandScale[i]/100)*90 + 80, (vijandScale[i]/100)*45 +150);
         
         if(vijandDirection[i] === LEFT){
             if(vijandSize[i] === 1){
@@ -231,8 +237,8 @@ var tekenVijand = function() {
 var tekenKogel = function(x, y) {
 
     fill("blue");
-    ellipse(x, y, 20, 20)
-
+    ellipse(x, y, 20, 20);
+    image(kogelFrame1, x-17.5, y-17.5, 35);
 };
 
 
@@ -242,13 +248,16 @@ var tekenKogel = function(x, y) {
  * @param {number} y y-coördinaat
  */
 var tekenSpeler = function(x, y) {
-  
+    
+    fill("red");
+    //rect(x-40, y-75, 80, 150 );
 
-  noStroke();
-  fill("white");
-  rect(x, y - 10 , 50, 20);
-  image(blobvis, x - 25, y - 25, 50, 50);
- 
+  if(spelerDirection === RIGHT){
+  image(protagonistRightFrame1, x-105, y-75, 225);
+  }
+  if(spelerDirection === LEFT){
+  image(protagonistLeftFrame1, x-105, y-75, 215);
+  }
   
 };
 
@@ -341,14 +350,22 @@ if(kogelX < kogelXDestination +originalKogelSpeed && kogelX > kogelXDestination 
 
 }
 
-if(kogelX > width -10 || kogelX < 10 ||kogelY > height -10 || kogelY < 10){
+if(kogelX > width -17.5 || kogelX < 17.5 ||kogelY > height -17.5 || kogelY < 17.5){
     kogelXSpeed = originalKogelSpeed;
     kogelYSpeed = originalKogelSpeed;
     kogelDestinationReached = true;
 }
 
+    if(kogelX < 17.5){kogelX = kogelX + originalKogelSpeed}
+    if(kogelX > width -17.5){kogelX = kogelX - originalKogelSpeed}
+    
 //zorgt dat de orginele positie van de kogel altijd bij de speler is
-kogelXOriginal = spelerX + 55;
+if(spelerDirection === RIGHT){
+kogelXOriginal = spelerX + 65;
+}
+if(spelerDirection === LEFT){
+kogelXOriginal = spelerX - 65;
+}
 kogelYOriginal = spelerY;  
 
 //beweegt de kogel terug naar de speler als een boomerang
@@ -371,10 +388,13 @@ if(kogelX < kogelXOriginal +originalKogelSpeed && kogelX > kogelXOriginal -origi
 }
 
 
-//zorgt dat de kogel met de speler meebeweegt als hij niet aan het schieten is
+//zorgt dat de kogel met de speler meebeweegt als hij niet aan het schieten is (en net is omgedraaid)
 if(mouseIsClicked === false){
-    kogelX = kogelXOriginal;
-    kogelY = kogelYOriginal;
+    if(kogelX < kogelXOriginal){kogelX = kogelX + originalKogelSpeed}
+    if(kogelX > kogelXOriginal){kogelX = kogelX - originalKogelSpeed}
+    if(kogelY < kogelYOriginal){kogelY = kogelY + originalKogelSpeed}
+    if(kogelY > kogelYOriginal){kogelY = kogelY - originalKogelSpeed}
+    
 }
 
 
@@ -392,11 +412,12 @@ var beweegSpeler = function() {
 
 if(keyIsDown(68)){
     spelerX = spelerX + spelerSpeed;
-   
+    spelerDirection = RIGHT;
 }
 
 if(keyIsDown(65)){
     spelerX = spelerX - spelerSpeed;
+    spelerDirection = LEFT;
 }
 
 if(keyIsDown(87)){
@@ -408,19 +429,19 @@ if(keyIsDown(83)){
 }
 
 
-if(spelerX < 25){
+if(spelerX < 40){
     spelerX = spelerX + spelerSpeed;
 }
 
-if(spelerX > width - 25){
+if(spelerX > width - 40){
     spelerX = spelerX - spelerSpeed;
 }
 
-if(spelerY < 25){
+if(spelerY < 75){
     spelerY = spelerY + spelerSpeed;
 }
 
-if(spelerY > height - 25){
+if(spelerY > height - 75){
     spelerY = spelerY - spelerSpeed;
 }
 
@@ -441,6 +462,7 @@ var checkVijandGeraakt = function() {
 
                 vijandLevens[i] = vijandLevens[i] - 1;
                 vijandInvinsible[i] = true;
+                kogelDestinationReached = true;
 
         }
 
@@ -492,7 +514,7 @@ var checkSpelerGeraakt = function() {
 for(var i = 0; i < vijanden.length; i++){
     
     
-    if(spelerX < vijandX[i] +vijandScale[i] + 25 && spelerX > vijandX[i] -25 && spelerY < vijandY[i] +vijandScale[i]/2 +25 && spelerY > vijandY[i] -25 && spelerInvinsible === false){
+    if(spelerX < vijandX[i] +(vijandScale[i]/100)*90 + 40 && spelerX > vijandX[i] -40 && spelerY < vijandY[i] +(vijandScale[i]/100)*45 +75 && spelerY > vijandY[i] -75 && spelerInvinsible === false){
                 spelerLevens = spelerLevens - 1;
                 spelerInvinsible = true;
     }
@@ -533,7 +555,11 @@ var checkGameOver = function() {
 
 
 function preload(){
-    blobvis = loadImage('images/test.jpg');
+    protagonistRightFrame1 = loadImage('images/protagonist right frame1.png');
+    protagonistLeftFrame1 = loadImage('images/protagonist left frame1.png');
+
+    kogelFrame1 = loadImage('images/kogel frame1.png');
+
     backGround = loadImage('images/canvas1.png');
 
     smallSlimeLeftFrame1 = loadImage('images/small slime left frame 1.png');
@@ -572,6 +598,8 @@ function setup() {
 
   aantalVijanden = kamer + 4;
 
+  kogelX = spelerX + 65;
+  kogelY = height/2;
   spelerY = height/2;
 
   for(var i = 0; i < aantalVijanden; i++){
@@ -650,7 +678,7 @@ function draw() {
       tekenKogel(kogelX, kogelY);
       scores();  
 
-      if (vijanden.length > 0){
+      if (vijanden.length > 0 && tijdPunten >0){
           tijdPunten = tijdPunten -1;
       }
       kamerPunten = kamer * 400;

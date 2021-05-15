@@ -21,7 +21,7 @@ Basis: uitleg, spelen, afgaan en punten
 - [ ] life system speler
 - [x] switching levels (als alle vijandjes dood zijn && spelerPos = x, dan Case LEVEL2)
 - [ ] game-over screen
-- [ ] meer levels maken
+- [x] meer levels maken
 - [x] punten op scherm zetten
 - [x] punten kunnen scoren
 - [ ] uitlegscherm
