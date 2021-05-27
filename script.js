@@ -28,7 +28,10 @@ const RIGHT = 1;
 
 var animatieKlok = 0;
 
-var spelerX = 65; // x-positie van speler
+var activeBackGround = backGround1;
+var backGroundNumber = 1;
+
+var spelerX = 40; // x-positie van speler
 var spelerY = 0; // y-positie van speler
 var spelerSpeed = 6; // snelheid van speler
 var spelerLevens = 10; // hoeveelheid levens van de speler
@@ -41,7 +44,9 @@ var protagonistLeftFrame1 = 0;
 
 var kogelFrame1 = 0;
 
-var backGround = 0;
+var backGround1 = 0;
+var backGround2 = 0;
+var backGround3 = 0;
 
 var smallSlimeLeftFrame1 = 0;
 var smallSlimeLeftFrame2 = 0;
@@ -62,9 +67,9 @@ var largeSlimeRightFrame1 = 0;
 var largeSlimeRightFrame2 = 0;
 var largeSlimeRightFrame3 = 0;
 
-var kogelX = spelerX + 65;    // x-positie van kogel
+var kogelX = spelerX + 40;    // x-positie van kogel
 var kogelY = spelerY;    // y-positie van kogel
-var kogelXOriginal = spelerX + 65;    // x-positie van kogel
+var kogelXOriginal = spelerX + 40;    // x-positie van kogel
 var kogelYOriginal = spelerY;    // y-positie van kogel
 var kogelXDestination = 0; // x destination van kogel
 var kogelYDestination = 0; // y destination van kogel
@@ -111,7 +116,7 @@ var tekenVeld = function () {
   fill("green");
   translate(0,0);
   rect(0, 0, width , height );
-  image(backGround, 0, 0, 1280, 720);
+  image(activeBackGround, 0, 0, 1280, 720);
 };
 
 var scores = function () {
@@ -361,10 +366,10 @@ if(kogelX > width -17.5 || kogelX < 17.5 ||kogelY > height -17.5 || kogelY < 17.
     
 //zorgt dat de orginele positie van de kogel altijd bij de speler is
 if(spelerDirection === RIGHT){
-kogelXOriginal = spelerX + 65;
+kogelXOriginal = spelerX + 40;
 }
 if(spelerDirection === LEFT){
-kogelXOriginal = spelerX - 65;
+kogelXOriginal = spelerX - 40;
 }
 kogelYOriginal = spelerY;  
 
@@ -560,7 +565,9 @@ function preload(){
 
     kogelFrame1 = loadImage('images/kogel frame1.png');
 
-    backGround = loadImage('images/canvas1.png');
+    backGround1 = loadImage('images/background1.png');
+    backGround2 = loadImage('images/background2.png');
+    backGround3 = loadImage('images/background3.png');
 
     smallSlimeLeftFrame1 = loadImage('images/small slime left frame 1.png');
     smallSlimeLeftFrame2 = loadImage('images/small slime left frame2.png');
@@ -593,14 +600,19 @@ function setup() {
   
   createCanvas(1280, 720);
   
-  // Kleur de achtergrond blauw, zodat je het kunt zien
-  background(73, 57, 38, 1);
 
   aantalVijanden = kamer + 4;
 
   kogelX = spelerX + 65;
   kogelY = height/2;
   spelerY = height/2;
+
+backGroundNumber = random(0.5, 3.5);
+backGroundNumber = Math.round(backGroundNumber);
+if(backGroundNumber ===1){activeBackGround = backGround1}
+if(backGroundNumber ===2){activeBackGround = backGround2}
+if(backGroundNumber ===3){activeBackGround = backGround3}
+  
 
   for(var i = 0; i < aantalVijanden; i++){
         vijanden.push("vijand"+ i);
@@ -619,13 +631,13 @@ function setup() {
     }
     if(temporaryVijandscale === 2){
         vijandSpeed.push(2);
-        vijandLevens.push(3);
+        vijandLevens.push(2);
         vijandScale.push(90);
         
     }
     if(temporaryVijandscale === 3){
         vijandSpeed.push(2.5);
-        vijandLevens.push(4);
+        vijandLevens.push(3);
         vijandScale.push(130);
 
     }
@@ -683,7 +695,7 @@ function draw() {
       }
       kamerPunten = kamer * 400;
       
-      if (vijanden.length === 0 && keyIsDown(69)){
+      if (vijanden.length === 0 && spelerX > ((width/32)*31.5)-80 && spelerY > (height/9)* 3 && spelerY < (height/9)* 5 ){
         
         score = score + tijdPunten + kamerPunten + vijandPunten;
 
@@ -694,7 +706,7 @@ function draw() {
         kamerPunten = 0;
         tijdPunten = 3000;
         
-        spelerX = 65;
+        spelerX = 40;
         spelerInvinsible = false; // checkt of de speler invinsible is
         invinsibleTimer = 0; // timer, duh
         spelerLevens = 10; // hoeveelheid levens van de speler
@@ -734,7 +746,7 @@ function draw() {
         kamerPunten = 0;
         tijdPunten = 3000;
         score = 0;
-        spelerX = 65;
+        spelerX = 40;
         spelerInvinsible = false; // checkt of de speler invinsible is
         invinsibleTimer = 0; // timer, duh
         spelerLevens = 10; // hoeveelheid levens van de speler
