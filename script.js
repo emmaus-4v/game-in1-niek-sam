@@ -47,6 +47,9 @@ var kogelFrame1 = 0;
 var backGround1 = 0;
 var backGround2 = 0;
 var backGround3 = 0;
+var backGround4 = 0;
+var backGround5 = 0;
+var backGround6 = 0;
 
 var smallSlimeLeftFrame1 = 0;
 var smallSlimeLeftFrame2 = 0;
@@ -81,16 +84,27 @@ var kogelDestinationReached = false; // checkt of de destination van de kogel is
 
 
 var aantalVijanden = 4; // aantal vijanden
+var unRoundedVijandSize = 1; // niet afgeronde size
 var vijanden = []; // 
 var vijandX = [];   // array met x-posities van vijanden
 var vijandY = [];   // array met y-posities van vijanden
 var vijandSpeed = []; // array met snelheden van vijanden
 var vijandScale = []; // array met sizes van vijanden
-var temporaryVijandscale = 0; // tijdelijke opslag voor de grootte van de vijand
 var vijandLevens = []; // array met het aantal levens van vijanden
 var vijandInvinsible = []; // array met of de vijand net is geraakt of niet
 var vijandDirection = [];
 var vijandSize = [];
+
+var temporaryVijanden = 0; // 
+var temporaryVijandX = 0;   // 
+var temporaryVijandY = 0;   // 
+var temporaryVijandSpeed = 0; // 
+var temporaryVijandScale = 0; // 
+var temporaryVijandLevens = 0; // 
+var temporaryVijandInvinsible = 0; //
+var temporaryVijandDirection = 0;
+var temporaryVijandSize = 0;
+
 
 
 var kamer = 1;
@@ -272,7 +286,26 @@ var tekenSpeler = function(x, y) {
  */
 var beweegVijand = function() {
 
-for(var i = 0; i < vijandX.length; i++){
+
+
+for(var i = 0; i < vijanden.length; i++){
+
+    if(vijandY[i] > vijandY[i+1]){
+        
+        temporaryVijanden = vijanden[i]; vijanden.splice(i, 1); vijanden.splice(i+1, 0, temporaryVijanden); temporaryVijanden = 0;
+        temporaryVijandX = vijandX[i]; vijandX.splice(i, 1); vijandX.splice(i+1, 0, temporaryVijandX); temporaryVijandX = 0;
+        temporaryVijandY = vijandY[i]; vijandY.splice(i, 1); vijandY.splice(i+1, 0, temporaryVijandY); temporaryVijandY = 0;
+        temporaryVijandSpeed = vijandSpeed[i]; vijandSpeed.splice(i, 1); vijandSpeed.splice(i+1, 0, temporaryVijandSpeed); temporaryVijandSpeed = 0;
+        temporaryVijandScale = vijandScale[i]; vijandScale.splice(i, 1); vijandScale.splice(i+1, 0, temporaryVijandScale); temporaryVijandScale= 0;
+        temporaryVijandLevens = vijandLevens[i]; vijandLevens.splice(i, 1); vijandLevens.splice(i+1, 0, temporaryVijandLevens); temporaryVijandLevens = 0;
+        temporaryVijandInvinsible = vijandInvinsible[i]; vijandInvinsible.splice(i, 1); vijandInvinsible.splice(i+1, 0, temporaryVijandInvinsible); temporaryVijandInvinsible = 0;
+        temporaryVijandDirection = vijandDirection[i]; vijandDirection.splice(i, 1); vijandDirection.splice(i+1, 0, temporaryVijandDirection); temporaryVijandDirection = 0;
+        temporaryVijandSize = vijandSize[i]; vijandSize.splice(i, 1); vijandSize.splice(i+1, 0, temporaryVijandSize); temporaryVijandSize = 0;
+        i--;
+        }
+
+
+
     if(spelerX > vijandX[i] ){
         vijandX[i] = vijandX[i] + vijandSpeed[i];
         vijandDirection[i] = RIGHT;
@@ -282,8 +315,7 @@ for(var i = 0; i < vijandX.length; i++){
         vijandX[i] = vijandX[i] - vijandSpeed[i];
         vijandDirection[i] = LEFT;
     }
-}
-for(var i = 0; i < vijandY.length; i++){
+
     if(spelerY > vijandY[i]){
         vijandY[i] = vijandY[i] + vijandSpeed[i];
     }
@@ -483,10 +515,10 @@ var checkVijandGeraakt = function() {
                     vijandPunten = vijandPunten + 50;
                 }
                 if(vijandSize[i] === 2){
-                    vijandPunten = vijandPunten + 150;
+                    vijandPunten = vijandPunten + 100;
                 }
                 if(vijandSize[i] === 3){
-                    vijandPunten = vijandPunten + 300;
+                    vijandPunten = vijandPunten + 150;
                 }
 
                 vijanden.splice(i, 1);
@@ -568,6 +600,9 @@ function preload(){
     backGround1 = loadImage('images/background1.png');
     backGround2 = loadImage('images/background2.png');
     backGround3 = loadImage('images/background3.png');
+    backGround4 = loadImage('images/background4.png');
+    backGround5 = loadImage('images/background5.png');
+    backGround6 = loadImage('images/background6.png');
 
     smallSlimeLeftFrame1 = loadImage('images/small slime left frame 1.png');
     smallSlimeLeftFrame2 = loadImage('images/small slime left frame2.png');
@@ -607,11 +642,14 @@ function setup() {
   kogelY = height/2;
   spelerY = height/2;
 
-backGroundNumber = random(0.5, 3.5);
+backGroundNumber = random(0.5, 6.5);
 backGroundNumber = Math.round(backGroundNumber);
 if(backGroundNumber ===1){activeBackGround = backGround1}
 if(backGroundNumber ===2){activeBackGround = backGround2}
 if(backGroundNumber ===3){activeBackGround = backGround3}
+if(backGroundNumber ===4){activeBackGround = backGround4}
+if(backGroundNumber ===5){activeBackGround = backGround5}
+if(backGroundNumber ===6){activeBackGround = backGround6}
   
 
   for(var i = 0; i < aantalVijanden; i++){
@@ -620,28 +658,27 @@ if(backGroundNumber ===3){activeBackGround = backGround3}
         vijandY.push(random((height/100)*10, (height/100)*90));
         vijandDirection.push(LEFT);
 
-        temporaryVijandscale = random(0.5, 3.5);
-        temporaryVijandscale = Math.round(temporaryVijandscale);
+        unRoundedVijandSize = random(0.5, 3.5);
+        vijandSize.push(Math.round(unRoundedVijandSize));
 
-    if(temporaryVijandscale === 1){
+    if(vijandSize[i] === 1){
         vijandSpeed.push(1);
         vijandLevens.push(1);
         vijandScale.push(50);
 
     }
-    if(temporaryVijandscale === 2){
+    if(vijandSize[i] === 2){
         vijandSpeed.push(2);
         vijandLevens.push(2);
         vijandScale.push(90);
         
     }
-    if(temporaryVijandscale === 3){
+    if(vijandSize[i] === 3){
         vijandSpeed.push(2.5);
         vijandLevens.push(3);
         vijandScale.push(130);
 
     }
-    vijandSize.push(temporaryVijandscale);
     
     vijandInvinsible.push(false);
 
@@ -668,12 +705,10 @@ function draw() {
     
         case SPELEN:
       animatieTimer();
-      beweegVijand();
       beweegKogel();
-      beweegSpeler();
-      
-      
-
+        beweegVijand();
+        beweegSpeler();
+  
       if (checkVijandGeraakt()) {
         // punten erbij
         // nieuwe vijand maken
