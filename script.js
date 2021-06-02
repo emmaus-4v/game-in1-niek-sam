@@ -51,6 +51,18 @@ var backGround4 = 0;
 var backGround5 = 0;
 var backGround6 = 0;
 
+var smallSplatter1 = 0;
+var smallSplatter2 = 0;
+var smallSplatter3 = 0;
+
+var mediumSplatter1 = 0;
+var mediumSplatter2 = 0;
+var mediumSplatter3 = 0;
+
+var largeSplatter1 = 0;
+var largeSplatter2 = 0;
+var largeSplatter3 = 0;
+
 var smallSlimeLeftFrame1 = 0;
 var smallSlimeLeftFrame2 = 0;
 var smallSlimeRightFrame1 = 0;
@@ -104,6 +116,13 @@ var temporaryVijandLevens = 0; //
 var temporaryVijandInvinsible = 0; //
 var temporaryVijandDirection = 0;
 var temporaryVijandSize = 0;
+
+var splatterX = [];
+var splatterY = [];
+var splatterSize = [];
+var unroundedSplatterNumber = 0;
+var splatterNumber = [];
+var vijandDead = [];
 
 
 
@@ -166,11 +185,34 @@ animatieKlok = 0;
  */
 var tekenVijand = function() {
 
+    for(var i = 0; i < vijandDead.length; i++){
+        if(vijandDead[i] === true){
+            
+                if(splatterSize[i] === 1){
+                    if(splatterNumber[i] === 1){image(smallSplatter1, splatterX[i], splatterY[i])}
+                    if(splatterNumber[i] === 2){image(smallSplatter2, splatterX[i], splatterY[i])}
+                    if(splatterNumber[i] === 3){image(smallSplatter3, splatterX[i], splatterY[i])}
+                }
+                if(splatterSize[i] === 2){
+                    if(splatterNumber[i] === 1){image(mediumSplatter1, splatterX[i], splatterY[i])}
+                    if(splatterNumber[i] === 2){image(mediumSplatter2, splatterX[i], splatterY[i])}
+                    if(splatterNumber[i] === 3){image(mediumSplatter3, splatterX[i], splatterY[i])}
+                }
+                if(splatterSize[i] === 3){
+                    if(splatterNumber[i] === 1){image(largeSplatter1, splatterX[i], splatterY[i])}
+                    if(splatterNumber[i] === 2){image(largeSplatter2, splatterX[i], splatterY[i])}
+                    if(splatterNumber[i] === 3){image(largeSplatter3, splatterX[i], splatterY[i])}
+                }
+            }
+    }
     for(var i = 0; i < vijanden.length; i++){
 
         //rect(vijandX[i], vijandY[i], vijandScale[i], vijandScale[i]/2);
         //rect(vijandX[i] - 40, vijandY[i] - 75, (vijandScale[i]/100)*90 + 80, (vijandScale[i]/100)*45 +150);
         
+        
+               
+
         if(vijandDirection[i] === LEFT){
             if(vijandSize[i] === 1){
                 if(animatieKlok < 12.6 ){
@@ -246,6 +288,7 @@ var tekenVijand = function() {
     };
 
 };
+
 
 
 /**
@@ -510,16 +553,16 @@ var checkVijandGeraakt = function() {
 
         //delete de gegevens van de vijand als hij dood is
         if(vijandLevens[i] < 1){
-
-                if(vijandSize[i] === 1){
-                    vijandPunten = vijandPunten + 50;
-                }
-                if(vijandSize[i] === 2){
-                    vijandPunten = vijandPunten + 100;
-                }
-                if(vijandSize[i] === 3){
-                    vijandPunten = vijandPunten + 150;
-                }
+            vijandDead.push(true);
+            splatterX.push(vijandX[i]);
+            splatterY.push(vijandY[i]);
+            splatterSize.push(vijandSize[i]);
+            unroundedSplatterNumber = random(0.51, 3.49);
+            splatterNumber.push (Math.round(unroundedSplatterNumber));
+            
+            if(vijandSize[i] === 1){vijandPunten = vijandPunten +50}
+            if(vijandSize[i] === 2){vijandPunten = vijandPunten +100}
+            if(vijandSize[i] === 3){vijandPunten = vijandPunten +150}
 
                 vijanden.splice(i, 1);
                 vijandX.splice(i, 1);
@@ -530,11 +573,16 @@ var checkVijandGeraakt = function() {
                 vijandInvinsible.splice(i, 1);
                 vijandDirection.splice(i, 1);
                 vijandSize.splice(i, 1);
+
                 i--;
+
+                
         }
 
+            
+}
 
-    };
+
 
   return false;
 };
@@ -604,6 +652,18 @@ function preload(){
     backGround5 = loadImage('images/background5.png');
     backGround6 = loadImage('images/background6.png');
 
+    smallSplatter1 = loadImage('images/small splatter1.png');
+    smallSplatter2 = loadImage('images/small splatter2.png');
+    smallSplatter3 = loadImage('images/small splatter3.png');
+
+    mediumSplatter1 = loadImage('images/medium splatter1.png');
+    mediumSplatter2 = loadImage('images/medium splatter2.png');
+    mediumSplatter3 = loadImage('images/medium splatter3.png');
+
+    largeSplatter1 = loadImage('images/large splatter1.png');
+    largeSplatter2 = loadImage('images/large splatter2.png');
+    largeSplatter3 = loadImage('images/large splatter3.png');
+
     smallSlimeLeftFrame1 = loadImage('images/small slime left frame 1.png');
     smallSlimeLeftFrame2 = loadImage('images/small slime left frame2.png');
     smallSlimeRightFrame1 = loadImage('images/small slime right frame1.png');
@@ -657,6 +717,7 @@ if(backGroundNumber ===6){activeBackGround = backGround6}
         vijandX.push(random((width/100)*40, (width/100)*90));
         vijandY.push(random((height/100)*10, (height/100)*90));
         vijandDirection.push(LEFT);
+
 
         unRoundedVijandSize = random(0.5, 3.5);
         vijandSize.push(Math.round(unRoundedVijandSize));
@@ -745,6 +806,10 @@ function draw() {
         spelerInvinsible = false; // checkt of de speler invinsible is
         invinsibleTimer = 0; // timer, duh
         spelerLevens = 10; // hoeveelheid levens van de speler
+        splatterX.splice(0, splatterX.length);
+        splatterY.splice(0, splatterY.length);
+        splatterSize.splice(0, splatterSize.length);
+        vijandDead.splice(0, vijandDead.length);
 
       } 
 
@@ -785,6 +850,10 @@ function draw() {
         spelerInvinsible = false; // checkt of de speler invinsible is
         invinsibleTimer = 0; // timer, duh
         spelerLevens = 10; // hoeveelheid levens van de speler
+        splatterX.splice(0, splatterX.length);
+        splatterY.splice(0, splatterY.length);
+        splatterSize.splice(0, splatterSize.length);
+        vijandDead.splice(0, vijandDead.length);
         spelStatus = SPELEN;
     }   
       break;
