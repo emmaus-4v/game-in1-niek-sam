@@ -413,7 +413,7 @@ var beweegKogel = function() {
 
 
 
-//****TOT HIER HEB IK OPGERUIMD****//
+//****TOT HIER WAS HET OPGERUIMD****//
 
 
 
