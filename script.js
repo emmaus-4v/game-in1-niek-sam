@@ -785,14 +785,14 @@ function draw() {
       
       if(mouseX > 1050 && mouseX < 1180 && mouseY > 425 && mouseY < 445) {
         image(gameOverHoverRestart, 0, 0);
-        text("score: " + score,  (width/5)*3.75, 20, 500, 500);
+        text("score: " + score,  (width/5)*0.25, 20, 500, 500);
         if(mouseIsPressed === true){
             score = 0;
             spelStatus = SPELEN}
     }
     else if(mouseX > 1060 && mouseX < 1170 && mouseY > 475 && mouseY < 525) {
         image(gameOverHoverMainMenu, 0, 0)
-        text("score: " + score,  (width/5)*3.75, 20, 500, 500);
+        text("score: " + score,  (width/5)*0.25, 20, 500, 500);
         if(mouseIsPressed === true){
             score = 0;
             spelStatus = MAINMENU}
