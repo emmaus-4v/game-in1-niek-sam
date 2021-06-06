@@ -33,6 +33,7 @@ var spelerY = 0; // y-positie van speler
 var spelerSpeed = 6; // snelheid van speler
 var spelerLeeft = true; // houdt bij of de speler leeft of dat het gameover is
 var spelerDirection = RIGHT; // richting van de speler
+var spelerWalking = false; // houdt bij of de speler aan het lopen is
 
 
 var kogelX = spelerX + 40; // x-positie van kogel
@@ -93,7 +94,16 @@ var mouseIsClicked = false; // houdt bij of de muis is ingedrukt
 
 // plaatjes speler
 var protagonistRightFrame1 = 0;
+var protagonistRightWalkFrame2 = 0;
+var protagonistRightWalkFrame3 = 0;
+var protagonistRightIdleFrame2 = 0;
+var protagonistRightIdleFrame3 = 0;
+
 var protagonistLeftFrame1 = 0;
+var protagonistLeftWalkFrame2 = 0;
+var protagonistLeftWalkFrame3 = 0;
+var protagonistLeftIdleFrame2 = 0;
+var protagonistLeftIdleFrame3 = 0;
 
 // plaatje kogel
 var kogelFrame1 = 0;
@@ -187,7 +197,7 @@ var scores = function () {
 var animatieTimer = function () {
 
     animatieKlok = animatieKlok+1;
-    if(animatieKlok === 21){animatieKlok = 0}
+    if(animatieKlok === 30){animatieKlok = 0}
 
 };
 
@@ -225,35 +235,35 @@ var tekenVijand = function() {
 
         if(vijandDirection[i] === LEFT){
             if(vijandSize[i] === 1){
-                if(animatieKlok < 12.6 ){image(smallSlimeLeftFrame1, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 12.6 ){image(smallSlimeLeftFrame2, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok < 18 ){image(smallSlimeLeftFrame1, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 18 ){image(smallSlimeLeftFrame2, vijandX[i], vijandY[i], vijandScale[i])}
             }
             if(vijandSize[i] === 2){
-                if(animatieKlok < 8.2 ){image(mediumSlimeLeftFrame1, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 8.2 && animatieKlok < 12.6 ){image(mediumSlimeLeftFrame2, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 12.6 ){image(mediumSlimeLeftFrame3, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok < 12 ){image(mediumSlimeLeftFrame1, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 12 && animatieKlok < 18 ){image(mediumSlimeLeftFrame2, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 18 ){image(mediumSlimeLeftFrame3, vijandX[i], vijandY[i], vijandScale[i])}
             }
             if(vijandSize[i] === 3){
-                if(animatieKlok < 8.2 ){image(largeSlimeLeftFrame1, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 8.2 && animatieKlok < 12.6 ){image(largeSlimeLeftFrame2, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 12.6 ){image(largeSlimeLeftFrame3, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok < 12 ){image(largeSlimeLeftFrame1, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 12 && animatieKlok < 18 ){image(largeSlimeLeftFrame2, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 18 ){image(largeSlimeLeftFrame3, vijandX[i], vijandY[i], vijandScale[i])}
             }
         }
         
         if(vijandDirection[i] === RIGHT){
             if(vijandSize[i] === 1){
-                if(animatieKlok < 12.6 ){image(smallSlimeRightFrame1, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 12.6 ){image(smallSlimeRightFrame2, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok < 18 ){image(smallSlimeRightFrame1, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 18 ){image(smallSlimeRightFrame2, vijandX[i], vijandY[i], vijandScale[i])}
             }
             if(vijandSize[i] === 2){
-                if(animatieKlok < 8.2 ){image(mediumSlimeRightFrame1, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 8.2 && animatieKlok < 12.6 ){image(mediumSlimeRightFrame2, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 12.6 ){image(mediumSlimeRightFrame3, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok < 12 ){image(mediumSlimeRightFrame1, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 12 && animatieKlok < 18 ){image(mediumSlimeRightFrame2, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 18 ){image(mediumSlimeRightFrame3, vijandX[i], vijandY[i], vijandScale[i])}
             }
             if(vijandSize[i] === 3){
-                if(animatieKlok < 8.2 ){image(largeSlimeRightFrame1, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 8.2 && animatieKlok < 12.6 ){image(largeSlimeRightFrame2, vijandX[i], vijandY[i], vijandScale[i])}
-                if(animatieKlok > 12.6 ){image(largeSlimeRightFrame3, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok < 12 ){image(largeSlimeRightFrame1, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 12 && animatieKlok < 18 ){image(largeSlimeRightFrame2, vijandX[i], vijandY[i], vijandScale[i])}
+                if(animatieKlok >= 18 ){image(largeSlimeRightFrame3, vijandX[i], vijandY[i], vijandScale[i])}
             }
         }
 
@@ -282,8 +292,31 @@ var tekenKogel = function(x, y) {
  */
 var tekenSpeler = function(x, y) {
     
-  if(spelerDirection === RIGHT){image(protagonistRightFrame1, x-105, y-75, 225)}
-  if(spelerDirection === LEFT){image(protagonistLeftFrame1, x-105, y-75, 215)}
+  if(spelerDirection === RIGHT && spelerWalking === true){
+    if(animatieKlok < 5 || animatieKlok >= 15 && animatieKlok < 20){image(protagonistRightFrame1, x-105, y-75, 225)}
+    if(animatieKlok >= 5 && animatieKlok < 10 || animatieKlok >= 20 && animatieKlok < 25){image(protagonistRightWalkFrame2, x-105, y-75, 225)}
+    if(animatieKlok >= 10 && animatieKlok < 15 || animatieKlok >= 25 && animatieKlok < 30){image(protagonistRightWalkFrame3, x-105, y-75, 225)}
+  }  
+
+  if(spelerDirection === LEFT && spelerWalking === true){
+    if(animatieKlok < 5 || animatieKlok >= 15 && animatieKlok < 20){image(protagonistLeftFrame1, x-105, y-75, 215)}
+    if(animatieKlok >= 5 && animatieKlok < 10 || animatieKlok >= 20 && animatieKlok < 25){image(protagonistLeftWalkFrame2, x-105, y-75, 215)}
+    if(animatieKlok >= 10 && animatieKlok < 15 || animatieKlok >= 25 && animatieKlok < 30){image(protagonistLeftWalkFrame3, x-105, y-75, 215)}
+  }
+
+  if(spelerDirection === RIGHT && spelerWalking === false){
+    if(animatieKlok < 10){image(protagonistRightFrame1, x-105, y-75, 215)}
+    if(animatieKlok >= 10 && animatieKlok < 20){image(protagonistRightIdleFrame2, x-105, y-75, 215)}
+    if(animatieKlok >= 20 && animatieKlok < 30){image(protagonistRightIdleFrame3, x-105, y-75, 215)}
+  }  
+
+  if(spelerDirection === LEFT && spelerWalking === false){
+    if(animatieKlok < 10){image(protagonistLeftFrame1, x-105, y-75, 215)}
+    if(animatieKlok >= 10 && animatieKlok < 20){image(protagonistLeftIdleFrame2, x-105, y-75, 215)}
+    if(animatieKlok >= 20 && animatieKlok < 30){image(protagonistLeftIdleFrame3, x-105, y-75, 215)}
+  }
+  
+
   
 };
 
@@ -426,20 +459,26 @@ var beweegSpeler = function() {
 if(keyIsDown(68)){
     spelerX = spelerX + spelerSpeed;
     spelerDirection = RIGHT;
-}
+    spelerWalking = true;
+} 
 
 if(keyIsDown(65)){
     spelerX = spelerX - spelerSpeed;
     spelerDirection = LEFT;
-}
+    spelerWalking = true;
+} 
 
 if(keyIsDown(87)){
     spelerY = spelerY - spelerSpeed;
-}
+    spelerWalking = true;
+} 
 
 if(keyIsDown(83)){
     spelerY = spelerY + spelerSpeed;
-}
+    spelerWalking = true;
+} 
+
+if (keyIsDown(68) === false && keyIsDown(65) === false && keyIsDown(87) === false && keyIsDown(83) === false){spelerWalking = false}
 
 // zorgt dat de speler niet het scherm af kan lopen
 if(spelerX < 40){
@@ -546,7 +585,16 @@ for(var i = 0; i < vijanden.length; i++){
  */
 function preload(){
     protagonistRightFrame1 = loadImage('images/protagonist right frame1.png');
+    protagonistRightWalkFrame2 = loadImage('images/protagonist right walk frame2.png');
+    protagonistRightWalkFrame3 = loadImage('images/protagonist right walk frame3.png');
+    protagonistRightIdleFrame2 = loadImage('images/protagonist right idle frame2.png');
+    protagonistRightIdleFrame3 = loadImage('images/protagonist right idle frame3.png');
+
     protagonistLeftFrame1 = loadImage('images/protagonist left frame1.png');
+    protagonistLeftWalkFrame2 = loadImage('images/protagonist left walk frame2.png');
+    protagonistLeftWalkFrame3 = loadImage('images/protagonist left walk frame3.png');
+    protagonistLeftIdleFrame2 = loadImage('images/protagonist left idle frame2.png');
+    protagonistLeftIdleFrame3 = loadImage('images/protagonist left idle frame3.png');
 
     kogelFrame1 = loadImage('images/kogel frame1.png');
 
