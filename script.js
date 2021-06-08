@@ -372,8 +372,7 @@ var beweegVijand = function() {
 var beweegKogel = function() {
 
     //de setup van het schieten. Zorgt dat je maar 1 keer hoeft te klikken en bepaald een aantal variabelen. (we hebben niet gewoon "mouseClicked" gebruikt omdat het niet werkte (ook bij andere groepjes niet))
-    if(mouseIsPressed && mouseIsClicked === false){
-        
+    if(mouseIsPressed && mouseIsClicked === false){     
         kogelXDestination = mouseX;
         kogelYDestination = mouseY;
         mouseIsClicked = true;
@@ -383,12 +382,12 @@ var beweegKogel = function() {
             if((kogelXDestination - kogelX) < 0){kogelXSpeed = -1 * originalKogelSpeed}
             kogelYSpeed = (kogelYDestination - kogelY) * (kogelXSpeed/(kogelXDestination-kogelX))
         }
+
         // berekent de relatieve snelheid in de andere helft van de gevallen
         else if (((kogelYDestination - kogelY) >= (kogelXDestination - kogelX) && (kogelYDestination - kogelY) > 0) || ((kogelYDestination - kogelY) <= (kogelXDestination - kogelX) && (kogelYDestination - kogelY) < 0)){
             if((kogelYDestination - kogelY) < 0){kogelYSpeed = -1 * originalKogelSpeed}
             kogelXSpeed = (kogelXDestination - kogelX) * (kogelYSpeed/(kogelYDestination-kogelY)); 
         }
-
     }
 
     //beweegt de kogel naar zijn bestemming
@@ -445,60 +444,44 @@ var beweegKogel = function() {
 };
 
 
-
-//****TOT HIER WAS HET OPGERUIMD****//
-
-
-
 /**
  * beweegt de speler
  */
 var beweegSpeler = function() {
 
-// beweegt de speler
-if(keyIsDown(68)){
-    spelerX = spelerX + spelerSpeed;
-    spelerDirection = RIGHT;
-    spelerWalking = true;
-} 
+    // beweegt de speler
+    if(keyIsDown(68)){
+        spelerX = spelerX + spelerSpeed;
+        spelerDirection = RIGHT;
+        spelerWalking = true;
+    } 
 
-if(keyIsDown(65)){
-    spelerX = spelerX - spelerSpeed;
-    spelerDirection = LEFT;
-    spelerWalking = true;
-} 
+    if(keyIsDown(65)){
+        spelerX = spelerX - spelerSpeed;
+        spelerDirection = LEFT;
+        spelerWalking = true;
+    } 
 
-if(keyIsDown(87)){
-    spelerY = spelerY - spelerSpeed;
-    spelerWalking = true;
-} 
+    if(keyIsDown(87)){
+        spelerY = spelerY - spelerSpeed;
+        spelerWalking = true;
+    } 
 
-if(keyIsDown(83)){
-    spelerY = spelerY + spelerSpeed;
-    spelerWalking = true;
-} 
+    if(keyIsDown(83)){
+        spelerY = spelerY + spelerSpeed;
+        spelerWalking = true;
+    } 
 
-if (keyIsDown(68) === false && keyIsDown(65) === false && keyIsDown(87) === false && keyIsDown(83) === false){spelerWalking = false}
+    if (keyIsDown(68) === false && keyIsDown(65) === false && keyIsDown(87) === false && keyIsDown(83) === false){spelerWalking = false}
 
-// zorgt dat de speler niet het scherm af kan lopen
-if(spelerX < 40){
-    spelerX = spelerX + spelerSpeed;
-}
-
-if(spelerX > width - 40){
-    spelerX = spelerX - spelerSpeed;
-}
-
-if(spelerY < 75){
-    spelerY = spelerY + spelerSpeed;
-}
-
-if(spelerY > height - 75){
-    spelerY = spelerY - spelerSpeed;
-}
-
+    // zorgt dat de speler niet het scherm af kan lopen
+    if(spelerX < 40){spelerX = spelerX + spelerSpeed}
+    if(spelerX > width - 40){spelerX = spelerX - spelerSpeed}
+    if(spelerY < 75){spelerY = spelerY + spelerSpeed}
+    if(spelerY > height - 75){spelerY = spelerY - spelerSpeed}
 
 };
+
 
 /**
  * Zoekt uit of de vijand is geraakt
@@ -510,19 +493,15 @@ var checkVijandGeraakt = function() {
         
         // kijkt of de kogel in de vijand is
         if(kogelX < vijandX[i] +vijandScale[i] && kogelX > vijandX[i] && kogelY < vijandY[i] +vijandScale[i]/2 && kogelY > vijandY[i] && mouseIsClicked === true && vijandInvinsible[i] === false){
-
-                vijandLevens[i] = vijandLevens[i] - 1;
-                vijandInvinsible[i] = true;
-                kogelDestinationReached = true;
-
+            vijandLevens[i] = vijandLevens[i] - 1;
+            vijandInvinsible[i] = true;
+            kogelDestinationReached = true;
         }
 
         // kijkt of de kogel weer buiten de vijand is, zodat je de vijand niet 50 x per seconde raakt terwijl de kogel in de vijand is
-        if(kogelX > vijandX[i] +vijandScale[i] || kogelX < vijandX[i] && kogelY > vijandY[i] +vijandScale[i]/2 || kogelY < vijandY[i] && vijandInvinsible[i] === true){
-            vijandInvinsible[i] = false;
-        }
+        if(kogelX > vijandX[i] +vijandScale[i] || kogelX < vijandX[i] && kogelY > vijandY[i] +vijandScale[i]/2 || kogelY < vijandY[i] && vijandInvinsible[i] === true){vijandInvinsible[i] = false}
 
-        // delete de gegevens van de vijand als hij dood is en voegt punten toe
+        // delete de gegevens van de vijand, maakt de gegevens van de dode vijanden voegt punten toe (als de vijand dood is)
         if(vijandLevens[i] < 1){
             vijandDead.push(true);
             splatterX.push(vijandX[i]);
@@ -535,28 +514,24 @@ var checkVijandGeraakt = function() {
             if(vijandSize[i] === 2){vijandPunten = vijandPunten +100}
             if(vijandSize[i] === 3){vijandPunten = vijandPunten +150}
 
-                vijanden.splice(i, 1);
-                vijandX.splice(i, 1);
-                vijandY.splice(i, 1);
-                vijandScale.splice(i, 1);
-                vijandSpeed.splice(i, 1);
-                vijandLevens.splice(i, 1);
-                vijandInvinsible.splice(i, 1);
-                vijandDirection.splice(i, 1);
-                vijandSize.splice(i, 1);
-
-                i--;
-
-                
+            vijanden.splice(i, 1);
+            vijandX.splice(i, 1);
+            vijandY.splice(i, 1);
+            vijandScale.splice(i, 1);
+            vijandSpeed.splice(i, 1);
+            vijandLevens.splice(i, 1);
+            vijandInvinsible.splice(i, 1);                
+            vijandDirection.splice(i, 1);
+            vijandSize.splice(i, 1);
+            i--;              
         }
 
-            
-}
+    }
+    
+    return false;
 
-
-
-  return false;
 };
+
 
 /**
  * Zoekt uit of de speler is geraakt
@@ -564,26 +539,23 @@ var checkVijandGeraakt = function() {
  */
 var checkSpelerGeraakt = function() {
     
+    for(var i = 0; i < vijanden.length; i++){
+        
+        // kijkt of de vijand de speler raakt
+        if(spelerX < vijandX[i] +(vijandScale[i]/100)*90 + 40 && spelerX > vijandX[i] -40 && spelerY < vijandY[i] +(vijandScale[i]/100)*45 +75 && spelerY > vijandY[i] -75){spelStatus = GAMEOVER}
     
-    
-for(var i = 0; i < vijanden.length; i++){
-    
-    // kijkt of de vijand de speler raakt
-    if(spelerX < vijandX[i] +(vijandScale[i]/100)*90 + 40 && spelerX > vijandX[i] -40 && spelerY < vijandY[i] +(vijandScale[i]/100)*45 +75 && spelerY > vijandY[i] -75){
-                spelStatus = GAMEOVER;
-                
     }
-   
 
-}
+    return false;
 
-  return false;
 };
+
 
 /**
  * preload alle afbeeldingen
  */
 function preload(){
+
     protagonistRightFrame1 = loadImage('images/protagonist right frame1.png');
     protagonistRightWalkFrame2 = loadImage('images/protagonist right walk frame2.png');
     protagonistRightWalkFrame3 = loadImage('images/protagonist right walk frame3.png');
@@ -646,35 +618,38 @@ function preload(){
     largeSlimeRightFrame1 = loadImage('images/large slime right frame1.png');
     largeSlimeRightFrame2 = loadImage('images/large slime right frame2.png');
     largeSlimeRightFrame3 = loadImage('images/large slime right frame3.png');
-}
+
+};
+
+
 /**
  * setup
  */
 function setup() {
 
-  // Maakt een canvas
-  createCanvas(1280, 720);
+    // Maakt een canvas
+    createCanvas(1280, 720);
   
-  // berekent het aantal vijanden per kamer
-  aantalVijanden = kamer + 4;
+    // berekent het aantal vijanden per kamer
+    aantalVijanden = kamer + 4;
 
-  //stelt een paar dingetjes in
-  kogelX = spelerX + 65;
-  kogelY = height/2;
-  spelerY = height/2;
+    //stelt een paar dingetjes in
+    kogelX = spelerX + 65;
+    kogelY = height/2;
+    spelerY = height/2;
 
-// kiest een random achtergrond
-backGroundNumber = random(0.5, 6.5);
-backGroundNumber = Math.round(backGroundNumber);
-if(backGroundNumber ===1){activeBackGround = backGround1}
-if(backGroundNumber ===2){activeBackGround = backGround2}
-if(backGroundNumber ===3){activeBackGround = backGround3}
-if(backGroundNumber ===4){activeBackGround = backGround4}
-if(backGroundNumber ===5){activeBackGround = backGround5}
-if(backGroundNumber ===6){activeBackGround = backGround6}
+    // kiest een random achtergrond
+    backGroundNumber = random(0.5, 6.5);
+    backGroundNumber = Math.round(backGroundNumber);
+    if(backGroundNumber ===1){activeBackGround = backGround1}
+    if(backGroundNumber ===2){activeBackGround = backGround2}
+    if(backGroundNumber ===3){activeBackGround = backGround3}
+    if(backGroundNumber ===4){activeBackGround = backGround4}
+    if(backGroundNumber ===5){activeBackGround = backGround5}
+    if(backGroundNumber ===6){activeBackGround = backGround6}
   
 
-  for(var i = 0; i < aantalVijanden; i++){
+    for(var i = 0; i < aantalVijanden; i++){
         
         // genereert een aantal random variabelen voor in de arrays van de vijanden
         vijanden.push("vijand"+ i);
@@ -682,176 +657,180 @@ if(backGroundNumber ===6){activeBackGround = backGround6}
         vijandY.push(random((height/100)*10, (height/100)*90));
         vijandDirection.push(LEFT);
 
-
         unRoundedVijandSize = random(0.5, 3.5);
         vijandSize.push(Math.round(unRoundedVijandSize));
 
-    if(vijandSize[i] === 1){
-        vijandSpeed.push(random(1, 1.5));
-        vijandLevens.push(1);
-        vijandScale.push(50);
+        if(vijandSize[i] === 1){
+            vijandSpeed.push(random(1, 1.5));
+            vijandLevens.push(1);
+            vijandScale.push(50);
+        }
 
-    }
-    if(vijandSize[i] === 2){
-        vijandSpeed.push(random(1.5, 2));
-        vijandLevens.push(2);
-        vijandScale.push(90);
-        
-    }
-    if(vijandSize[i] === 3){
-        vijandSpeed.push(random(2, 2.5));
-        vijandLevens.push(3);
-        vijandScale.push(130);
+        if(vijandSize[i] === 2){
+            vijandSpeed.push(random(1.5, 2));
+            vijandLevens.push(2);
+            vijandScale.push(90);           
+        }
 
-    }
+        if(vijandSize[i] === 3){
+            vijandSpeed.push(random(2, 2.5));
+            vijandLevens.push(3);
+            vijandScale.push(130);
+        }
     
-    vijandInvinsible.push(false);
+        vijandInvinsible.push(false);
 
-    };
-
-    
-
+    }
   
-}
+};
 
 
 /**
  * draw
  */
 function draw() {
-  switch (spelStatus) {
+
+    switch (spelStatus){
+
     case MAINMENU:
 
-    //kijkt of de muis boven de knop zit en verandert de achtergrond op basis van dat
-    if(mouseX > 845 && mouseX < 1070 && mouseY > 500 && mouseY < 535) {
-        image(mainMenuHoverHowToPlay, 0, 0);
-        if(mouseIsPressed === true){spelStatus = UITLEG}
-    }
-    else if(mouseX > 205 && mouseX < 430 && mouseY > 500 && mouseY < 535) {
-        image(mainMenuHoverStart, 0, 0)
-        if(mouseIsPressed === true){spelStatus = SPELEN}
-    }
-    else{image(mainMenu, 0, 0)}
+        //kijkt of de muis boven de knop zit en verandert de achtergrond op basis van dat
+        if(mouseX > 845 && mouseX < 1070 && mouseY > 500 && mouseY < 535){
+            image(mainMenuHoverHowToPlay, 0, 0);
+            if(mouseIsPressed === true){spelStatus = UITLEG}
+        }
 
-        break;
+        else if(mouseX > 205 && mouseX < 430 && mouseY > 500 && mouseY < 535){
+            image(mainMenuHoverStart, 0, 0)
+            if(mouseIsPressed === true){spelStatus = SPELEN}
+        }
+
+        else{image(mainMenu, 0, 0)}
+
+    break;
 
     case UITLEG:
 
         //kijkt of de muis boven de knop zit en verandert de achtergrond op basis van dat
         if(mouseX > 10 && mouseX < 65 && mouseY > 650 && mouseY < 705){
-        image(uitlegSchermHoverBack, 0, 0);
-        if(mouseIsPressed === true){spelStatus = MAINMENU}
+            image(uitlegSchermHoverBack, 0, 0);
+            if(mouseIsPressed === true){spelStatus = MAINMENU}
         }
+
         else{image(uitlegScherm, 0, 0)}
-        break;
+
+    break;
     
-        case SPELEN:
-      animatieTimer();
-      beweegKogel();
-      beweegVijand();
-      beweegSpeler();
-  
-      checkVijandGeraakt();
-      
-      checkSpelerGeraakt();
+    case SPELEN:
 
-      tekenVeld();
-      tekenVijand();
-      tekenSpeler(spelerX, spelerY);
-      tekenKogel(kogelX, kogelY);
-      scores();  
+        animatieTimer();
 
-      //haalt elke seconde punten van de tijdsbonus af
-      if (vijanden.length > 0 && tijdPunten >0){
-          tijdPunten = tijdPunten -1;
-      }
+        beweegKogel();
+        beweegVijand();
+        beweegSpeler();
 
-      // berekent de kamerbonus
-      kamerPunten = kamer * 400;
-      
-      //kijkt of alle vijanden in de kamer dood zijn, reset een aantal variabelen en berekent de score
-      if (vijanden.length === 0 && spelerX > ((width/32)*31.5)-80 && spelerY > (height/9)* 3 && spelerY < (height/9)* 5 ){
+        checkVijandGeraakt();
+        checkSpelerGeraakt();
+
+        tekenVeld();
+        tekenVijand();
+        tekenSpeler(spelerX, spelerY);
+        tekenKogel(kogelX, kogelY);
+
+        scores();  
+
+        //haalt elke seconde punten van de tijdsbonus af
+        if (vijanden.length > 0 && tijdPunten >0){tijdPunten = tijdPunten -1}
+
+        // berekent de kamerbonus
+        kamerPunten = kamer * 400;
         
-        score = score + tijdPunten + kamerPunten + vijandPunten;
+        //kijkt of alle vijanden in de kamer dood zijn, reset een aantal variabelen en berekent de score
+        if (vijanden.length === 0 && spelerX > ((width/32)*31.5)-80 && spelerY > (height/9)* 3 && spelerY < (height/9)* 5 ){            
+            score = score + tijdPunten + kamerPunten + vijandPunten;
+            kamer = kamer + 1;
 
-        kamer = kamer + 1;
-        setup();
-        
-        vijandPunten = 0;
-        kamerPunten = 0;
-        tijdPunten = 3000;
-        
-        spelerX = 40;
-        spelerLeeft = true; 
-        splatterX.splice(0, splatterX.length);
-        splatterY.splice(0, splatterY.length);
-        splatterSize.splice(0, splatterSize.length);
-        vijandDead.splice(0, vijandDead.length);
+            setup();
+            
+            vijandPunten = 0;
+            kamerPunten = 0;
+            tijdPunten = 3000;
+            
+            spelerX = 40;
+            spelerLeeft = true;
 
-      } 
+            splatterX.splice(0, splatterX.length);
+            splatterY.splice(0, splatterY.length);
+            splatterSize.splice(0, splatterSize.length);
+            vijandDead.splice(0, vijandDead.length);
+        } 
 
-    
-      break;
+    break;
       
-      case GAMEOVER:
+    case GAMEOVER:
 
-      
-      //reset een aantal variabelen
-      for(var i = 0; i < vijanden.length; i++){
-                vijanden.splice(i, 1);
-                vijandX.splice(i, 1);
-                vijandY.splice(i, 1);
-                vijandScale.splice(i, 1);
-                vijandSpeed.splice(i, 1);
-                vijandLevens.splice(i, 1);
-                vijandInvinsible.splice(i, 1);
-                vijandDirection.splice(i, 1);
-                vijandSize.splice(i, 1);
-                i--;
+        //reset een aantal variabelen
+        for(var i = 0; i < vijanden.length; i++){
+
+            vijanden.splice(i, 1);
+            vijandX.splice(i, 1);
+            vijandY.splice(i, 1);
+            vijandScale.splice(i, 1);
+            vijandSpeed.splice(i, 1);
+            vijandLevens.splice(i, 1);
+            vijandInvinsible.splice(i, 1);
+            vijandDirection.splice(i, 1);
+            vijandSize.splice(i, 1);
+            i--;
+
         }
-
 
         kamer = 1;
-        setup();
         
+        setup();
         
         vijandPunten = 0;
         kamerPunten = 0;
         tijdPunten = 3000;
+
         spelerX = 40;
         spelerLeeft = true;
+
         splatterX.splice(0, splatterX.length);
         splatterY.splice(0, splatterY.length);
         splatterSize.splice(0, splatterSize.length);
         vijandDead.splice(0, vijandDead.length);
      
-      //kijkt of de muis boven de knop zit en verandert de achtergrond op basis van dat + tekent de totale score op het game over scherm
-      textSize(30);
-      textFont("fantasy");
-      fill("white");
-
+        //kijkt of de muis boven de knop zit en verandert de achtergrond op basis van dat + tekent de totale score op het game over scherm
+        textSize(30);
+        textFont("fantasy");
+        fill("white");
       
-      if(mouseX > 1050 && mouseX < 1180 && mouseY > 425 && mouseY < 445) {
-        image(gameOverHoverRestart, 0, 0);
-        text("score: " + score,  (width/5)*0.25, 20, 500, 500);
-        if(mouseIsPressed === true){
-            score = 0;
-            spelStatus = SPELEN}
-    }
-    else if(mouseX > 1060 && mouseX < 1170 && mouseY > 475 && mouseY < 525) {
-        image(gameOverHoverMainMenu, 0, 0)
-        text("score: " + score,  (width/5)*0.25, 20, 500, 500);
-        if(mouseIsPressed === true){
-            score = 0;
-            spelStatus = MAINMENU}
-    }
-    else{
-        image(gameOver, 0, 0)
-        text("score: " + score,  (width/5)*0.25, 20, 500, 500);
-    }
-       
-        
-      break;
+        if(mouseX > 1050 && mouseX < 1180 && mouseY > 425 && mouseY < 445){
+            image(gameOverHoverRestart, 0, 0);
+            text("score: " + score,  (width/5)*0.25, 20, 500, 500);
+            if(mouseIsPressed === true){
+                score = 0;
+                spelStatus = SPELEN
+            }
+        }
+
+        else if(mouseX > 1060 && mouseX < 1170 && mouseY > 475 && mouseY < 525){
+            image(gameOverHoverMainMenu, 0, 0)
+            text("score: " + score,  (width/5)*0.25, 20, 500, 500);
+            if(mouseIsPressed === true){
+                score = 0;
+                spelStatus = MAINMENU
+            }
+        }
+
+        else{
+            image(gameOver, 0, 0)
+            text("score: " + score,  (width/5)*0.25, 20, 500, 500);
+        }
+                   
+    break;
    
   }
-}
+
+};

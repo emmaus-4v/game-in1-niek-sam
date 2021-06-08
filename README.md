@@ -1,6 +1,6 @@
 Deze game is gebaseerd op het template voor 4HV van het Emmauscollege Rotterdam
 
-## Mijn spel: *naam van het spel*
+## Mijn spel:
 Gemaakt door:
 - Niek
 - Sam
@@ -18,27 +18,35 @@ Basis: uitleg, spelen, afgaan en punten
 - [x] teken vijand
 - [x] beweeg vijand
 - [x] life system vijanden
-- [ ] life system speler
-- [x] switching levels (als alle vijandjes dood zijn && spelerPos = x, dan Case LEVEL2)
-- [ ] game-over screen
-- [x] meer levels maken
+- [x] animaties 
+- [x] switching levels (als alle vijandjes dood zijn en de positie van de speler x is)
+- [x] game-over screen
+- [x] uitleg screen 
+- [x] main menu 
 - [x] punten op scherm zetten
 - [x] punten kunnen scoren
-- [ ] uitlegscherm
+
 
 uiterlijk van de game
-- [ ] leuke speler maken
-- [ ] wapen maken
-- [ ] mooie achtergrond
-- [x] vijanden die er uit zien als vijanden en niet als gekleurde kanonnen
+- [x] leuke speler maken
+- [x] leuke menu's maken (main menu, game over, uitleg)
+- [x] leuke achtergronden
+- [x] leuke vijanden
+- [x] leuke dode vijanden maken
 
 DLC content
-- [ ] Traps
+- [ ] random obstakels
 - [ ] meerdere soorten vijanden
+- [ ] life-system
 
+## toevoeging
+- We hebben allebij ongeveer evenveel aan de game gewerkt, maar het grootste deel van de tijd hebben we het via Sam's gitpod 
+  gedaan (scherm delen via discord en dan samen werken), omdat we het onhandig vonden om tegelijk aan hetzelfde te werken met 
+  pullen en pushen. Dat is de reden dat Sam bijna elke keer heeft gepusht
 
 ## Credits
 - Game template van het Emmauscollege Rotterdam https://github.com/emmauscollege/4HV-game-template
 - manifest.json https://codelabs.developers.google.com/codelabs/your-first-pwapp/#3
 - icon http://www.iconarchive.com/show/android-lollipop-icons-by-dtafalonso/Play-Games-icon.html
-- ...
+- programming door Niek van den Hout en Sam Herberigs
+- art door Sam Herberigs
